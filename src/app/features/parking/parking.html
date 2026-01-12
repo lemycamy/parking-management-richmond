@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-indigo-100 text-neutral-950 flex flex-col items-center px-4 py-6">
+<div class="min-h-screen bg-background text-neutral-950 flex flex-col items-center px-4 py-6">
 
   <!-- Headerish -->
   <header class="w-full bg-indigo-300 rounded-lg p-4 flex items-center space-x-4">
@@ -12,11 +12,39 @@
   </header>
 
   <!-- Time in type shi Button -->
-  <button class="mt-6 w-full py-3 rounded-xl bg-indigo-600 text-white font-bold text-lg
-                 active:scale-95 transition-transform duration-150
-                 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-400">
-    TIME IN
-  </button>
+  <app-button class="mt-4 w-full">Time In</app-button>
+
+  <table cdk-table [dataSource]="dataSource" class="w-full mt-4">
+    <ng-container cdkColumnDef="plateNumber">
+      <th cdk-header-cell *cdkHeaderCellDef class="text-left bg-red-400">PLATE NUMBER</th>
+      <td cdk-cell *cdkCellDef="let element" class="border">{{element.plateNumber}}</td>
+    </ng-container>
+
+    <ng-container cdkColumnDef="enteredAt">
+      <th cdk-header-cell *cdkHeaderCellDef class="text-left bg-red-400">ENTERED AT</th>
+      <td cdk-cell *cdkCellDef="let element" class="border">{{element.enteredAt}}</td>
+    </ng-container>
+
+    <ng-container cdkColumnDef="exitedAt">
+      <th cdk-header-cell *cdkHeaderCellDef class="text-left bg-red-400">EXITED AT</th>
+      <td cdk-cell *cdkCellDef="let element" class="border"> {{element.exitedAt}} </td>
+    </ng-container>
+
+    <ng-container cdkColumnDef="status">
+      <th cdk-header-cell *cdkHeaderCellDef class="text-left bg-red-400">STATUS</th>
+      <td cdk-cell *cdkCellDef="let element" class="border"> {{element.status}} </td>
+    </ng-container>
+
+    <ng-container cdkColumnDef="actions">
+      <th cdk-header-cell *cdkHeaderCellDef class="text-left bg-red-400">ACTIONS</th>
+      <td cdk-cell *cdkCellDef="let element" class="border"> 
+        exit
+      </td>
+    </ng-container>
+
+    <tr cdk-header-row *cdkHeaderRowDef="displayedColumns"></tr>
+    <tr cdk-row *cdkRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
 
   <!-- Table Container -->
   <div class="mt-6 w-full bg-indigo-200 rounded-xl overflow-hidden flex flex-col">
@@ -56,8 +84,4 @@
     <button class="text-neutral-700 px-4 py-1">PAID</button>
     <button class="text-neutral-700 px-4 py-1">PENDING</button>
   </div>
-
-
-
-  
 </div>

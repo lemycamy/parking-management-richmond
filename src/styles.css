@@ -1,3 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "tailwindcss";
+
+:root {
+  --background: oklch(93% 0.034 272.788);
+  --primary: oklch(51.1% 0.262 276.966);
+  --text-main: oklch(0% 0% 0%);
+  --text-main-300: oklch(0% 0% 0%);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-primary: var(--primary);
+}
