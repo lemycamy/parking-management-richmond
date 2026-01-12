@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Button } from '../../shared/ui/button/button';
 import { CdkTableModule } from '@angular/cdk/table';
 import { MatTableDataSource } from '@angular/material/table';
+import {MatTabsModule} from '@angular/material/tabs';
+import { CommonModule } from '@angular/common';
 
 export interface ParkingSession {
   plateNumber: string;
@@ -49,10 +51,10 @@ export const ELEMENT_DATA: ParkingSession[] = [
   },
 ];
 
-
+//added mattabs and common modules
 @Component({
   selector: 'app-parking',
-  imports: [Button, CdkTableModule],
+  imports: [Button, CdkTableModule, MatTabsModule, CommonModule],
   templateUrl: './parking.html',
   styleUrl: './parking.css',
 })
@@ -61,7 +63,15 @@ export class Parking {
   displayedColumns: string[] = ['plateNumber', 'enteredAt', 'exitedAt', 'status', 'actions'];
   dataSource = new MatTableDataSource<any>([]);
 
+ //added sum  filtering for the tabs
+    activeData: ParkingSession[] = [];
+    exitedData: ParkingSession[] = [];
+
   ngOnInit(): void {
     this.dataSource.data = ELEMENT_DATA;
+
+  //sum gpt ahh filter  
+    this.activeData = ELEMENT_DATA.filter(e => e.status === 'PARKED' || e.status === 'OVERDUE');
+    this.exitedData = ELEMENT_DATA.filter(e => e.status === 'EXITED');
   }
 }
