@@ -1,15 +1,19 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import "tailwindcss";
 
-:root {
-  --background: oklch(93% 0.034 272.788);
-  --primary: oklch(51.1% 0.262 276.966);
-  --text-main: oklch(0% 0% 0%);
-  --text-main-300: oklch(0% 0% 0%);
+@theme {
+  --color-background: #F8FAFC;
+  --color-primary: oklch(59.6% 0.145 163.225);
+  --color-secondary: #72CF8E;
+  --color-text-900: #0B161E;
+  --color-text-300: #365261;
+  --color-success-900: rgba(61 190 129 / 100%);
+  --color-success-300: rgba(61 190 129 / 25%);
+  --color-success-100: rgb(209 237 224);
+  --color-danger-900: rgba(255 75 75 / 100%);
+  --color-danger-300: rgba(255 75 75 / 25%);
+  --color-danger-100: rgb(255 225 222);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-primary: var(--primary);
+.main-container {
+  @apply px-4 mx-auto max-w-7xl w-full;
 }

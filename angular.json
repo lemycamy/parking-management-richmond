@@ -3,7 +3,7 @@
   "version": 1,
   "cli": {
     "packageManager": "npm",
-    "analytics": false
+    "analytics": "72e142e2-f58f-4c6e-8278-00d6768db57c",
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -26,6 +26,7 @@
               }
             ],
             "styles": [
+              "src/material-theme.scss",
               "src/styles.css"
             ]
           },

@@ -1,77 +1,110 @@
-import { Component } from '@angular/core';
-import { Button } from '../../shared/ui/button/button';
-import { CdkTableModule } from '@angular/cdk/table';
-import { MatTableDataSource } from '@angular/material/table';
-import {MatTabsModule} from '@angular/material/tabs';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DatePipe } from '@angular/common';
+import { interval, map, Observable, startWith, Subject, takeUntil } from 'rxjs';
 
-export interface ParkingSession {
-  plateNumber: string;
-  enteredAt: string;
-  exitedAt: string | null;
-  status: 'PARKED' | 'EXITED' | 'OVERDUE';
-}
+import { MatTableDataSource } from '@angular/material/table';
+import { CdkTableModule } from '@angular/cdk/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
-export const ELEMENT_DATA: ParkingSession[] = [
-  {
-    plateNumber: 'ACE-1234',
-    enteredAt: '2026-01-11T08:12:00',
-    exitedAt: null,
-    status: 'PARKED',
-  },
-  {
-    plateNumber: 'BGT-9281',
-    enteredAt: '2026-01-11T07:45:00',
-    exitedAt: '2026-01-11T10:02:00',
-    status: 'EXITED',
-  },
-  {
-    plateNumber: 'KLM-5529',
-    enteredAt: '2026-01-11T06:30:00',
-    exitedAt: '2026-01-11T09:15:00',
-    status: 'EXITED',
-  },
-  {
-    plateNumber: 'XQZ-4410',
-    enteredAt: '2026-01-11T05:20:00',
-    exitedAt: null,
-    status: 'OVERDUE',
-  },
-  {
-    plateNumber: 'PNY-7812',
-    enteredAt: '2026-01-11T09:05:00',
-    exitedAt: null,
-    status: 'PARKED',
-  },
-  {
-    plateNumber: 'TRK-3399',
-    enteredAt: '2026-01-10T23:40:00',
-    exitedAt: '2026-01-11T06:10:00',
-    status: 'EXITED',
-  },
-];
+import { Button } from '../../shared/ui/button/button';
+import { ParkingService } from './services/parking.service';
+import { QueryState } from '../../core/models/graphql-response.model';
+import { ParkingSession } from './models/parking-session.model';
 
-//added mattabs and common modules
+import { Car, LucideAngularModule } from 'lucide-angular';
+import { PaginatedResponse } from '../../shared/types/paginated-response.type';
+
+const ELEMENT_DATA: any[] = [
+  {
+    id: "57e0f041-3597-4a2e-b9ea-466861bd2562",
+    vehicleType: "CAR",
+    plateNumber: "ABC-1234",
+    enteredAt: "2026-01-14T10:59:58.494Z",
+    durationMinutes: null,
+    exitedAt: null,
+    fee: 34,
+    paymentStatus: "UNPAID"
+  }
+]
+
 @Component({
   selector: 'app-parking',
-  imports: [Button, CdkTableModule, MatTabsModule, CommonModule],
+  imports: [
+    Button,
+    CdkTableModule,
+    CommonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    DatePipe,
+    LucideAngularModule,
+  ],
   templateUrl: './parking.html',
   styleUrl: './parking.css',
 })
 
-export class Parking {
-  displayedColumns: string[] = ['plateNumber', 'enteredAt', 'exitedAt', 'status', 'actions'];
-  dataSource = new MatTableDataSource<any>([]);
+export class ParkingComponent {
+  private parkingService = inject(ParkingService);
 
- //added sum  filtering for the tabs
-    activeData: ParkingSession[] = [];
-    exitedData: ParkingSession[] = [];
+  private destroy$ = new Subject<void>();
+
+  readonly Car = Car;
+
+  activeColumns: string[] = ['plateNumber', 'enteredAt', 'status', 'actions'];
+  exitedColumns: string[] = ['plateNumber', 'enteredAt', 'exitedAt', 'duration', 'fee', 'status'];
+
+  displayedColumns: string[] = ['plateNumber', 'enteredAt', 'exitedAt', 'status', 'actions'];
+  dataSource = new MatTableDataSource<ParkingSession>([]);
+
+  activeCarsData = new MatTableDataSource<ParkingSession>([]);
+  queryState: QueryState<PaginatedResponse<ParkingSession>> = {
+    data: null,
+    loading: false,
+    error: null,
+  };
+
+  now$: Observable<Date> = interval(1000).pipe(
+    startWith(0),
+    map(() => new Date())
+  );
 
   ngOnInit(): void {
-    this.dataSource.data = ELEMENT_DATA;
+    this.activeCarsData.data = ELEMENT_DATA;
+    // this.loadParkingSessions()
+  }
 
-  //sum gpt ahh filter  
-    this.activeData = ELEMENT_DATA.filter(e => e.status === 'PARKED' || e.status === 'OVERDUE');
-    this.exitedData = ELEMENT_DATA.filter(e => e.status === 'EXITED');
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  loadParkingSessions(): void {
+    this.queryState.loading = true;
+    this.queryState.error = null;
+
+    this.parkingService.getParkingSessions(1, 12).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (data) => {
+        this.queryState.data = data;
+        this.activeCarsData.data = data.data;
+        this.queryState.loading = false;
+        console.log(this.activeCarsData.data)
+      },
+      error: err => {
+        console.error('Error loading parking sessions:', err);
+        this.queryState.error = err.message || 'Failed to load data';
+        this.queryState.loading = false;
+      },
+    });
+  }
+
+  refreshData(): void {
+    this.loadParkingSessions();
   }
 }

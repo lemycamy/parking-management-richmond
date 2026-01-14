@@ -1,9 +1,19 @@
 import { Routes } from '@angular/router';
-import { Parking } from './features/parking/parking';
+import { ParkingComponent } from './features/parking/parking';
+import { Reports } from './features/reports/reports';
+import { ExitReceiptComponent } from './features/parking/pages/exit-receipt/exit-receipt';
 
 export const routes: Routes = [
     { 
         path: 'parking', 
-        component: Parking
+        component: ParkingComponent
+    },
+    {
+        path: 'parking/exit-receipt',
+        component: ExitReceiptComponent
+    },
+    { 
+        path: 'reports', 
+        component: Reports
     },
 ];

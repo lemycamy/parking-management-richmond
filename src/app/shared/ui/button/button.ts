@@ -9,5 +9,4 @@ import { Component, HostBinding } from '@angular/core';
 export class Button {
   @HostBinding('class')
   hostClass = '';
-  
 }

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Reports } from './reports';
+import { ExitReceipt } from './exit-receipt';
 
-describe('Reports', () => {
-  let component: Reports;
-  let fixture: ComponentFixture<Reports>;
+describe('ExitReceipt', () => {
+  let component: ExitReceipt;
+  let fixture: ComponentFixture<ExitReceipt>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Reports]
+      imports: [ExitReceipt]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Reports);
+    fixture = TestBed.createComponent(ExitReceipt);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
