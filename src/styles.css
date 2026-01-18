@@ -17,3 +17,7 @@
 .main-container {
   @apply px-4 mx-auto max-w-7xl w-full;
 }
+
+.clip-triangle {
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
