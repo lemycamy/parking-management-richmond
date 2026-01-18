@@ -13,15 +13,16 @@ export class ParkingService {
   private apollo = inject(Apollo);
 
   getParkingSessions(
-    page: number, 
-    limit: number
+    parkingState: "ACTIVE" | "EXITED",
+    page: number = 1, 
+    limit: number = 10,
   ): Observable<PaginatedResponse<ParkingSession>> {
     return this.apollo
       .query<ParkingSessionsByParkingStateResponse, ParkingSessionsVariables>({
       query: GET_PARKING_SESSIONS_BY_PARKING_STATE,
-      variables: { page, limit, parkingState: "ACTIVE" },
+      variables: { page, limit, parkingState: parkingState },
       fetchPolicy: 'network-only',
-    })
+    })  
     .pipe(
       map((result) => result.data?.parkingSessionsByParkingState ?? { data: [], meta: { total: 0, page: 0, limit: 0, totalPages: 0, hasNextPage: false, hasPreviousPage: false } })
     );

@@ -51,10 +51,8 @@
         <mat-form-field class="w-full" appearance="outline">
           <mat-label>Vehicle Type</mat-label>
           <mat-select>
-            <mat-option value="motorcycle">Motorcycle</mat-option>
-            <mat-option value="car">Car</mat-option>
-            <mat-option value="van">Van</mat-option>
-            <mat-option value="truck">Truck</mat-option>
+            <mat-option value="CAR">Car</mat-option>
+            <mat-option value="MOTOR">Motorcycle</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -70,8 +68,28 @@
 
   <img src="/images/banners/active-banner.png" alt="Active Banner" class="hidden md:block w-full rounded-lg mt-6" />
   <img src="/images/banners/active-banner-mobile.png" alt="Active Banner" class="md:hidden w-full rounded-lg mt-6" />
-  <div class="w-full overflow-x-auto mt-4 bg-white rounded-lg shadow-sm border border-slate-200">
-    <table cdk-table [dataSource]="activeCarsData" class="w-full border-collapse">
+
+  <div class="flex gap-3 items-center">
+    <mat-form-field appearance="outline" class="w-full h-full mt-6">
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyActiveSessionsFilter($event)" placeholder="Search by Plate or vehicle type..." #input>
+    </mat-form-field>
+    <lucide-angular [img]="ScanQrCode" class="w-12 h-12 cursor-pointer"></lucide-angular>
+  </div>
+
+  <div class="w-full overflow-x-auto bg-white rounded-lg shadow-sm border border-slate-200">
+    <table cdk-table [dataSource]="activeSessionsDataSource" class="w-full border-collapse">
+      <ng-container cdkColumnDef="vehicleType">
+        <th cdk-header-cell *cdkHeaderCellDef></th>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 font-bold text-sm w-12">
+          @if (element.vehicleType == 'CAR') {
+            <lucide-angular [img]="Car" class="w-8 h-8"></lucide-angular>
+          } @else {
+            <lucide-angular [img]="Motorbike" class="w-8 h-8"></lucide-angular>
+          }
+        </td>
+      </ng-container>
+      
       <ng-container cdkColumnDef="plateNumber">
         <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">PLATE NUMBER</th>
         <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 font-bold text-sm">{{element.plateNumber}}</td>
@@ -107,15 +125,32 @@
         </td>
       </ng-container>
 
-      <tr cdk-header-row *cdkHeaderRowDef="activeColumns" class="bg-secondary"></tr>
-      <tr cdk-row *cdkRowDef="let row; columns: activeColumns;" class="border-b border-slate-200 hover:bg-emerald-50 transition-colors"></tr>
+      <tr cdk-header-row *cdkHeaderRowDef="ACTIVE_SESSION_COLUMNS" class="bg-secondary"></tr>
+      <tr cdk-row *cdkRowDef="let row; columns: ACTIVE_SESSION_COLUMNS;" class="border-b border-slate-200 hover:bg-emerald-50 transition-colors"></tr>
     </table>
   </div>
 
   <img src="/images/banners/exited-banner.png" alt="Exited Banner" class="hidden md:block w-full rounded-lg mt-6" />
   <img src="/images/banners/exited-banner-mobile.png" alt="Exited Banner" class="md:hidden w-full rounded-lg mt-6" />
+
+  <mat-form-field appearance="outline" class="w-full h-full mt-6">
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyActiveSessionsFilter($event)" placeholder="Search by Plate or vehicle type..." #input>
+  </mat-form-field>
+  
   <div class="w-full overflow-x-auto mt-4 bg-white rounded-lg shadow-sm border border-slate-200">
-    <table cdk-table [dataSource]="dataSource" class="w-full border-collapse">
+    <table cdk-table [dataSource]="exitedSessionsDataSource" class="w-full border-collapse">
+      <ng-container cdkColumnDef="vehicleType">
+        <th cdk-header-cell *cdkHeaderCellDef></th>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 font-bold text-sm w-12">
+          @if (element.vehicleType == 'CAR') {
+            <lucide-angular [img]="Car" class="w-8 h-8"></lucide-angular>
+          } @else {
+            <lucide-angular [img]="Motorbike" class="w-8 h-8"></lucide-angular>
+          }
+        </td>
+      </ng-container>
+
       <ng-container cdkColumnDef="plateNumber">
         <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">PLATE NUMBER</th>
         <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 font-bold text-sm">{{element.plateNumber}}</td>
@@ -130,7 +165,9 @@
 
       <ng-container cdkColumnDef="exitedAt">
         <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">EXITED AT</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 text-sm"> {{element.exitedAt|date:'yyyy-MM-dd HH:mm'}} </td>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 text-sm">
+          {{ element.exitedAt | date:'hh:mm:ss a' }}
+        </td>
       </ng-container>
 
       <ng-container cdkColumnDef="duration">
@@ -148,15 +185,15 @@
         <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600">
           <span 
             class="px-3 py-2 rounded-md text-text-900 text-xs border"
-            [ngClass]="{'bg-emerald-300 border-emerald-700': element.status === 'PARKED', 'bg-red-300 border-red-700': element.status === 'OVERDUE', 'bg-slate-300 border-slate-700': element.status === 'EXITED'}"
+            [ngClass]="{'bg-emerald-300 border-emerald-700': element.paymentStatus === 'PAID', 'bg-red-300 border-red-700': element.paymentStatus === 'OVERDUE', 'bg-slate-300 border-slate-700': element.paymentStatus === 'UNPAID'}"
           >
-            {{ element.status }}
+            {{ element.paymentStatus }}
           </span>
         </td>
       </ng-container>
 
-      <tr cdk-header-row *cdkHeaderRowDef="exitedColumns" class="bg-secondary"></tr>
-      <tr cdk-row *cdkRowDef="let row; columns: exitedColumns;" class="border-b border-slate-200 hover:bg-emerald-50 transition-colors"></tr>
+      <tr cdk-header-row *cdkHeaderRowDef="EXITED_SESSION_COLUMNS" class="bg-secondary"></tr>
+      <tr cdk-row *cdkRowDef="let row; columns: EXITED_SESSION_COLUMNS;" class="border-b border-slate-200 hover:bg-emerald-50 transition-colors"></tr>
     </table>
   </div>
 </section>

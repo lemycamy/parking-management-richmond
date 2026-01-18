@@ -7,6 +7,7 @@ import { MainLayout } from "./layout/main-layout/main-layout";
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
+
 export class App {
   protected readonly title = signal('ParkingManagementV2');
 }

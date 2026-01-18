@@ -1,0 +1,33 @@
+<section class="main-container">
+  <h1 class="text-3xl font-medium text-text-900 mt-6">Daily Breakdown</h1>
+
+  <mat-form-field appearance="outline" class="mt-6">
+    <mat-label>Verbose datepicker</mat-label>
+    <input matInput [matDatepicker]="dp" [formControl]="date">
+    <mat-hint>MMMM DD, YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+    <mat-datepicker #dp></mat-datepicker>
+  </mat-form-field>
+
+  <div class="mt-6 grid grid-cols-4 gap-6">
+    <app-stat-card
+      [icon]="Banknote"
+      label="Total Revenue Today"
+      [value]="5500"
+    ></app-stat-card>
+
+    <app-stat-card
+      [icon]="Car"
+      label="Total Entries"
+      [value]="234"
+      iconBgClass="bg-blue-200 text-blue-700"
+    ></app-stat-card>
+
+    <app-stat-card
+      [icon]="Clock"
+      label="Avg Duration"
+      value="3.2 hrs"
+      iconBgClass="bg-amber-200 text-amber-700"
+    ></app-stat-card>
+  </div>
+</section>

@@ -15,21 +15,10 @@ import { ParkingService } from './services/parking.service';
 import { QueryState } from '../../core/models/graphql-response.model';
 import { ParkingSession } from './models/parking-session.model';
 
-import { Car, LucideAngularModule } from 'lucide-angular';
+import { Car, LucideAngularModule, Motorbike, ScanQrCode } from 'lucide-angular';
 import { PaginatedResponse } from '../../shared/types/paginated-response.type';
 
-const ELEMENT_DATA: any[] = [
-  {
-    id: "57e0f041-3597-4a2e-b9ea-466861bd2562",
-    vehicleType: "CAR",
-    plateNumber: "ABC-1234",
-    enteredAt: "2026-01-14T10:59:58.494Z",
-    durationMinutes: null,
-    exitedAt: null,
-    fee: 34,
-    paymentStatus: "UNPAID"
-  }
-]
+type SessionState = 'ACTIVE' | 'EXITED';
 
 @Component({
   selector: 'app-parking',
@@ -50,20 +39,23 @@ const ELEMENT_DATA: any[] = [
 
 export class ParkingComponent {
   private parkingService = inject(ParkingService);
-
   private destroy$ = new Subject<void>();
 
   readonly Car = Car;
+  readonly Motorbike = Motorbike;
+  readonly ScanQrCode = ScanQrCode;
 
-  activeColumns: string[] = ['plateNumber', 'enteredAt', 'status', 'actions'];
-  exitedColumns: string[] = ['plateNumber', 'enteredAt', 'exitedAt', 'duration', 'fee', 'status'];
+  readonly ACTIVE_SESSION_COLUMNS: string[] = ['vehicleType', 'plateNumber', 'enteredAt', 'status', 'actions'] as const;
+  readonly EXITED_SESSION_COLUMNS: string[] = ['vehicleType', 'plateNumber', 'enteredAt', 'exitedAt', 'duration', 'fee', 'status'] as const;
 
-  displayedColumns: string[] = ['plateNumber', 'enteredAt', 'exitedAt', 'status', 'actions'];
-  dataSource = new MatTableDataSource<ParkingSession>([]);
+  activeSessionsDataSource = new MatTableDataSource<ParkingSession>([]);
+  activeSessionState: QueryState<PaginatedResponse<ParkingSession>> = {
+    loading: false,
+    error: null,
+  };
 
-  activeCarsData = new MatTableDataSource<ParkingSession>([]);
-  queryState: QueryState<PaginatedResponse<ParkingSession>> = {
-    data: null,
+  exitedSessionsDataSource = new MatTableDataSource<ParkingSession>([]);
+  exitedSessionState: QueryState<PaginatedResponse<ParkingSession>> = {
     loading: false,
     error: null,
   };
@@ -74,8 +66,8 @@ export class ParkingComponent {
   );
 
   ngOnInit(): void {
-    this.activeCarsData.data = ELEMENT_DATA;
-    // this.loadParkingSessions()
+    this.loadSessions('ACTIVE');
+    this.loadSessions('EXITED');
   }
 
   ngOnDestroy(): void {
@@ -83,28 +75,31 @@ export class ParkingComponent {
     this.destroy$.complete();
   }
 
-  loadParkingSessions(): void {
-    this.queryState.loading = true;
-    this.queryState.error = null;
+  loadSessions(state: SessionState): void {
+    const isActive = state === 'ACTIVE';
+    const queryState = isActive ? this.activeSessionState : this.exitedSessionState;
+    const dataSource = isActive ? this.activeSessionsDataSource : this.exitedSessionsDataSource;
 
-    this.parkingService.getParkingSessions(1, 12).pipe(
+    queryState.loading = true;
+    queryState.error = null;
+
+    this.parkingService.getParkingSessions(state).pipe(
       takeUntil(this.destroy$)
     ).subscribe({
-      next: (data) => {
-        this.queryState.data = data;
-        this.activeCarsData.data = data.data;
-        this.queryState.loading = false;
-        console.log(this.activeCarsData.data)
+      next: (response) => {
+        dataSource.data = response.data;
+        queryState.loading = false;
       },
       error: err => {
         console.error('Error loading parking sessions:', err);
-        this.queryState.error = err.message || 'Failed to load data';
-        this.queryState.loading = false;
+        queryState.error = err.message || 'Failed to load data';
+        queryState.loading = false;
       },
     });
   }
 
-  refreshData(): void {
-    this.loadParkingSessions();
+  applyActiveSessionsFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.activeSessionsDataSource.filter = filterValue.trim().toLowerCase();
   }
 }
