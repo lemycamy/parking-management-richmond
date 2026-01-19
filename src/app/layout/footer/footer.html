@@ -1,3 +1,54 @@
-<footer class="main-container mt-16">
-  <h1>Footer</h1>
+
+<!-- Note  1. footer is left to right made with grid.
+           2. fake ahh stuff so some buttons dont work yet
+           3. re add main-column if needed(non full width)  -->
+
+<footer class=" mt-16 mb-16 p-10 bg-primary  text-white w-full">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    <!-- Far Left / Brand (taller) -->
+    <div class="row-span-2 flex flex-col justify-between">
+      <div>
+        <h1 class="text-4xl font-semibold mb-4">Lease Linq</h1>
+        <p class="text-sm opacity-80 max-w-xs">
+          Smart Parking Management System, built with Angular 14, GraphQL, and Prisma
+        </p>
+
+        <!-- Socials -->
+        <div class="flex gap-4 mt-6 opacity-80">
+          <span>𝕏</span>
+          <span>in</span>
+          <span>IG</span>
+          <span>fb</span>
+        </div>
+      </div>
+
+     
+    </div>
+
+    <!-- Middle / Link(site map) -->
+    <div>
+      <h2 class="text-sm font-semibold mb-4 uppercase tracking-wide">Site Map</h2>
+      <ul class="space-y-2 text-sm opacity-80">
+        <li class="cursor-pointer" routerLink="dashboard">Dashboard</li>
+        <li class="cursor-pointer" routerLink="parking">Parking</li>
+        <li class="cursor-pointer" routerLink="reports">Reports</li>
+      </ul>
+    </div>
+
+    <!-- Far right / Legal -->
+    <div>
+      <h2 class="text-sm font-semibold mb-4 uppercase tracking-wide">Legal</h2>
+      <ul class="space-y-2 text-sm opacity-80">
+        <li>Privacy Policy</li>
+        <li>Terms of Services</li>
+        <li>Lawyer’s Corner</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- bot bar  -->
+  <div class="mt-10 pt-4 border-t border-white/20 text-center text-xs opacity-70">
+    © 2024 Lease Linq. All Rights Reserved.
+  </div>
 </footer>
