@@ -4,6 +4,7 @@ import { Reports } from './features/reports/reports';
 import { ExitReceiptComponent } from './features/parking/pages/exit-receipt/exit-receipt';
 import { DashboardComponent } from './features/dashboard/dashboard';
 import { DailyBreakdown } from './features/reports/pages/daily-breakdown/daily-breakdown';
+import { ExitScan } from './features/parking/pages/exit-scan/exit-scan';
 
 export const routes: Routes = [
     { 
@@ -25,5 +26,9 @@ export const routes: Routes = [
     {
         path: 'reports/daily-breakdown',
         component: DailyBreakdown
+    },
+    {
+        path: 'parking/exit-scan',
+        component: ExitScan
     },
 ];
