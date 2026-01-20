@@ -19,6 +19,7 @@ export const GET_PARKING_SESSIONS_BY_PARKING_STATE = gql`
         durationMinutes
         exitedAt
         paymentStatus
+        parkingFee
       }
       meta {
         total

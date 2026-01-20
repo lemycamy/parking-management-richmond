@@ -1,52 +1,50 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DatePipe } from '@angular/common';
-import { interval, map, Observable, startWith, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
 import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
-import { Button } from '../../shared/ui/button/button';
 import { ParkingService } from './services/parking.service';
 import { QueryState } from '../../core/models/graphql-response.model';
 import { ParkingSession } from './models/parking-session.model';
 
 import { Car, LucideAngularModule, Motorbike, ScanQrCode } from 'lucide-angular';
 import { PaginatedResponse } from '../../shared/types/paginated-response.type';
+import { ParkingEntryForm } from "./components/parking-entry-form/parking-entry-form";
+import { ExitConfirmationDialog } from './components/exit-confirmation-dialog/exit-confirmation-dialog';
 
 type SessionState = 'ACTIVE' | 'EXITED';
 
 @Component({
   selector: 'app-parking',
   imports: [
-    Button,
     CdkTableModule,
     CommonModule,
     MatCardModule,
-    MatFormFieldModule,
     MatInputModule,
-    MatSelectModule,
-    DatePipe,
     LucideAngularModule,
+    ParkingEntryForm,
+    MatDialogModule
   ],
   templateUrl: './parking.html',
   styleUrl: './parking.css',
 })
 
 export class ParkingComponent {
-  private parkingService = inject(ParkingService);
-  private destroy$ = new Subject<void>();
-
   readonly Car = Car;
   readonly Motorbike = Motorbike;
   readonly ScanQrCode = ScanQrCode;
 
   readonly ACTIVE_SESSION_COLUMNS: string[] = ['vehicleType', 'plateNumber', 'enteredAt', 'status', 'actions'] as const;
   readonly EXITED_SESSION_COLUMNS: string[] = ['vehicleType', 'plateNumber', 'enteredAt', 'exitedAt', 'duration', 'fee', 'status'] as const;
+
+  private parkingService = inject(ParkingService);
+  private destroy$ = new Subject<void>();
+  private dialog = inject(MatDialog);
 
   activeSessionsDataSource = new MatTableDataSource<ParkingSession>([]);
   activeSessionState: QueryState<PaginatedResponse<ParkingSession>> = {
@@ -59,11 +57,6 @@ export class ParkingComponent {
     loading: false,
     error: null,
   };
-
-  now$: Observable<Date> = interval(1000).pipe(
-    startWith(0),
-    map(() => new Date())
-  );
 
   ngOnInit(): void {
     this.loadSessions('ACTIVE');
@@ -98,8 +91,34 @@ export class ParkingComponent {
     });
   }
 
+  exitSession(id: string): void {
+    const dialogRef = this.dialog.open(ExitConfirmationDialog);
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (!confirmed) return;
+
+      console.log("exited")
+
+      this.parkingService.exitParkingSession(id).subscribe({
+        next: (response) => {
+          console.log(response);
+          this.loadSessions('ACTIVE');
+          this.loadSessions('EXITED');
+        },
+        error: (error) => {
+          console.error('Error archiving attendee:', error);
+        }
+      })
+    })
+  }
+
   applyActiveSessionsFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.activeSessionsDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  applyExitSessionsFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.exitedSessionsDataSource.filter = filterValue.trim().toLowerCase();
   }
 }

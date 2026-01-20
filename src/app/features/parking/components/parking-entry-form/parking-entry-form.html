@@ -1,0 +1,40 @@
+<div class="px-6 py-4 bg-white rounded-lg shadow-sm border border-slate-200">
+  <div class="md:flex justify-between">
+    <h2 class="font-bold text-xl opacity-75">New Entry</h2>
+    
+    <span class="text-sm text-text-300">
+      {{ now$ | async | date:'MM-dd-yyyy' }}
+      &nbsp;|&nbsp;
+      {{ now$ | async | date:'hh:mm:ss a' }}
+    </span>
+  </div>
+
+  <div class="mt-4">
+    <form [formGroup]="entryForm" (ngSubmit)="onSubmit()">
+      <div class="md:grid grid-cols-2 gap-8" >
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Vehicle Type</mat-label>
+          <mat-select formControlName="vehicleType">
+            <mat-option value="CAR">Car</mat-option>
+            <mat-option value="MOTOR">Motorcycle</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Plate Number</mat-label>
+          <input matInput formControlName="plateNumber" placeholder="Plate Number">
+        </mat-form-field>
+      </div>
+
+      <button
+        mat-raised-button
+        color="primary"
+        class="px-4 py-2 rounded-md bg-primary hover:bg-emerald-700 text-white font-bold cursor-pointer"
+        type="submit"
+        [disabled]="isSubmitting || entryForm.invalid"
+      >
+        {{ isSubmitting ? 'Saving...' : 'Enter Parking' }}
+      </button>
+    </form>
+  </div>
+</div>

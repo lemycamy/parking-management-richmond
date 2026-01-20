@@ -1,9 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { GET_PARKING_SESSIONS_BY_PARKING_STATE } from '../../../graphql/queries/parking-sessions.query';
+import { GET_PARKING_SESSIONS_BY_PARKING_STATE } from '../graphql/parking-sessions.queries';
 import { map, Observable } from 'rxjs';
 import { ParkingSession, ParkingSessionsByParkingStateResponse, ParkingSessionsVariables } from '../models/parking-session.model';
 import { PaginatedResponse } from '../../../shared/types/paginated-response.type';
+import { CREATE_PARKING_SESSION, EXIT_PARKING_SESSION } from '../graphql/parking.mutations';
 
 @Injectable({
   providedIn: 'root',
@@ -28,4 +29,19 @@ export class ParkingService {
     );
   }
 
+  createParkingSession(input: any) {
+    return this.apollo.mutate({
+      mutation: CREATE_PARKING_SESSION,
+      variables: {
+        input
+      }
+    })
+  }
+
+  exitParkingSession(id: string) {
+    return this.apollo.mutate({
+      mutation: EXIT_PARKING_SESSION,
+      variables: { id },
+    });
+  }
 }

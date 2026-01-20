@@ -35,39 +35,22 @@
     </div>
   </div>
 
-  <div class="px-6 py-4 bg-white rounded-lg shadow-sm border border-slate-200">
-    <div class="md:flex justify-between">
-      <h2 class="font-bold text-xl opacity-75">New Entry</h2>
-      
-      <span class="text-sm text-text-300">
-        {{ now$ | async | date:'MM-dd-yyyy' }}
-        &nbsp;|&nbsp;
-        {{ now$ | async | date:'hh:mm:ss a' }}
-      </span>
-    </div>
-
-    <div class="mt-4">
-      <div class="md:grid grid-cols-2 gap-8">
-        <mat-form-field class="w-full" appearance="outline">
-          <mat-label>Vehicle Type</mat-label>
-          <mat-select>
-            <mat-option value="CAR">Car</mat-option>
-            <mat-option value="MOTOR">Motorcycle</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field class="w-full" appearance="outline">
-          <mat-label>Plate Number</mat-label>
-          <input matInput placeholder="Plate Number">
-        </mat-form-field>
-      </div>
-    </div>
-
-    <app-button>Time In</app-button>
-  </div>
+  <app-parking-entry-form></app-parking-entry-form>
 
   <img src="/images/banners/active-banner.png" alt="Active Banner" class="hidden md:block w-full rounded-lg mt-6" />
   <img src="/images/banners/active-banner-mobile.png" alt="Active Banner" class="md:hidden w-full rounded-lg mt-6" />
+
+  <div class="mt-6 md:w-1/2 grid grid-cols-2 gap-4">
+    <div class="flex items-center gap-4 bg-white rounded-lg shadow-sm border border-slate-200 p-5">
+      <lucide-angular [img]="Car" class="w-16 h-16"></lucide-angular>
+      <span class="text-4xl font-medium">21</span>
+    </div>
+
+    <div class="flex items-center gap-4 bg-white rounded-lg shadow-sm border border-slate-200 p-5">
+      <lucide-angular [img]="Motorbike" class="w-16 h-16"></lucide-angular>
+      <span class="text-4xl font-medium">21</span>
+    </div>
+  </div>
 
   <div class="flex gap-3 items-center">
     <mat-form-field appearance="outline" class="w-full h-full mt-6">
@@ -117,11 +100,9 @@
       <ng-container cdkColumnDef="actions">
         <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">ACTIONS</th>
         <td cdk-cell *cdkCellDef="let element" class="px-6 py-3 text-text-600"> 
-          <a href="/parking/exit-receipt">
-            <button class="px-4 py-2 rounded-md bg-danger-900 text-white font-bold cursor-pointer">
-              Exit
-            </button>
-          </a>
+          <button (click)="exitSession(element.id)" class="px-4 py-2 rounded-md bg-danger-900 text-white font-bold cursor-pointer">
+            Exit
+          </button>
         </td>
       </ng-container>
 
@@ -138,7 +119,7 @@
     <input matInput (keyup)="applyActiveSessionsFilter($event)" placeholder="Search by Plate or vehicle type..." #input>
   </mat-form-field>
   
-  <div class="w-full overflow-x-auto mt-4 bg-white rounded-lg shadow-sm border border-slate-200">
+  <div class="w-full overflow-x-auto bg-white rounded-lg shadow-sm border border-slate-200">
     <table cdk-table [dataSource]="exitedSessionsDataSource" class="w-full border-collapse">
       <ng-container cdkColumnDef="vehicleType">
         <th cdk-header-cell *cdkHeaderCellDef></th>
@@ -172,12 +153,12 @@
 
       <ng-container cdkColumnDef="duration">
         <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">DURATION</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 text-sm"> {{element.exitedAt|date:'yyyy-MM-dd HH:mm'}} </td>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 text-sm"> {{ element.durationMinutes }} mins</td>
       </ng-container>
 
       <ng-container cdkColumnDef="fee">
         <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">FEE</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 text-sm"> {{element.exitedAt|date:'yyyy-MM-dd HH:mm'}} </td>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 text-sm"> {{ element.parkingFee }} </td>
       </ng-container>
 
       <ng-container cdkColumnDef="status">
