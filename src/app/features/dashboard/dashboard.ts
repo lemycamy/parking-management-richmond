@@ -7,12 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 
 import { Banknote, Car, Clock, LucideAngularModule, TrendingUp,  } from 'lucide-angular';
-import * as echarts from 'echarts/core';
-import { LineChart, BarChart } from 'echarts/charts';
-import { GridComponent } from 'echarts/components';
-import { CanvasRenderer } from 'echarts/renderers';
-import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
-echarts.use([LineChart, BarChart, GridComponent, CanvasRenderer]);
+import { NgxEchartsDirective } from 'ngx-echarts';
+import { EChartsCoreOption } from 'echarts/core';
 
 import { getLastMonthDate } from '../../shared/utils/date';
 import { DASHBOARD_DATE_FORMAT } from '../../shared/utils/date-format';
@@ -34,7 +30,6 @@ import { StatCard } from "../../shared/components/stat-card/stat-card";
   styleUrl: './dashboard.css',
   providers: [
     { provide: MAT_DATE_FORMATS, useValue: DASHBOARD_DATE_FORMAT },
-    provideEchartsCore({ echarts }),
   ]
 })
 
@@ -49,7 +44,7 @@ export class DashboardComponent {
     end: new FormControl<Date | null>(new Date()),
   });
 
-  revenueChart: echarts.EChartsCoreOption = {
+  revenueChart: EChartsCoreOption = {
     grid: {
       top: '5%',
       bottom: '0%',
@@ -72,7 +67,7 @@ export class DashboardComponent {
     ],
   };
 
-  peakHoursChart: echarts.EChartsCoreOption = {
+  peakHoursChart: EChartsCoreOption = {
     grid: {
       top: '5%',
       left: '0%',

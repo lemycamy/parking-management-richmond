@@ -9,46 +9,26 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-    <div class="flex items-center justify-between bg-white rounded-lg shadow-sm border border-slate-200 p-5">
-      <div>
-        <p class="text-text-300">Revenue Today</p>
-        <p class="text-text-900 font-bold mt-1">P12</p>
-      </div>
-      <img src="/images/icons/revenue.png" alt="Revenue Icon" class="h-16">
-    </div>
-
-    <div class="flex items-center justify-between bg-white rounded-lg shadow-sm border border-slate-200 p-5">
-      <div>
-        <p class="text-text-300">Currently Parked</p>
-        <p class="text-text-900 font-bold mt-1">3 Vehicles</p>
-      </div>
-      <img src="/images/icons/parked.png" alt="Revenue Icon" class="h-16">
-    </div>
-
-    <div class="flex items-center justify-between bg-white rounded-lg shadow-sm border border-slate-200 p-5">
-      <div>
-        <p class="text-text-300">Total Entries Today</p>
-        <p class="text-text-900 font-bold mt-1">3</p>
-      </div>
-      <img src="/images/icons/entries.png" alt="Entries Icon" class="h-16">
-    </div>
-  </div>
-
   <app-parking-entry-form></app-parking-entry-form>
 
   <img src="/images/banners/active-banner.png" alt="Active Banner" class="hidden md:block w-full rounded-lg mt-6" />
   <img src="/images/banners/active-banner-mobile.png" alt="Active Banner" class="md:hidden w-full rounded-lg mt-6" />
 
-  <div class="mt-6 md:w-1/2 grid grid-cols-2 gap-4">
-    <div class="flex items-center gap-4 bg-white rounded-lg shadow-sm border border-slate-200 p-5">
-      <lucide-angular [img]="Car" class="w-16 h-16"></lucide-angular>
-      <span class="text-4xl font-medium">21</span>
+  <div class="mt-6 md:w-1/2 grid md:grid-cols-2 gap-4">
+    <div class="flex items-center justify-between text-end gap-4 bg-white rounded-lg shadow-sm border border-slate-200 p-5">
+      <img src="/images/icons/car.png" alt="Car Icon" class="h-13">
+      <div>
+        <p class="text-text-300">Vehicle</p>
+        <p class="text-text-900 font-bold mt-1 text-xl">12</p>
+      </div>
     </div>
 
-    <div class="flex items-center gap-4 bg-white rounded-lg shadow-sm border border-slate-200 p-5">
-      <lucide-angular [img]="Motorbike" class="w-16 h-16"></lucide-angular>
-      <span class="text-4xl font-medium">21</span>
+    <div class="flex items-center justify-between text-end gap-4 bg-white rounded-lg shadow-sm border border-slate-200 p-5">
+      <img src="/images/icons/motor.png" alt="Car Icon" class="h-16">
+      <div>
+        <p class="text-text-300">Vehicle</p>
+        <p class="text-text-900 font-bold mt-1 text-xl">21</p>
+      </div>
     </div>
   </div>
 
@@ -57,7 +37,7 @@
       <mat-label>Filter</mat-label>
       <input matInput (keyup)="applyActiveSessionsFilter($event)" placeholder="Search by Plate or vehicle type..." #input>
     </mat-form-field>
-    <lucide-angular [img]="ScanQrCode" class="w-12 h-12 cursor-pointer"></lucide-angular>
+    <lucide-angular [img]="ScanQrCode" class="w-12 h-12 cursor-pointer" routerLink="parking/exit-scan"></lucide-angular>
   </div>
 
   <div class="w-full overflow-x-auto bg-white rounded-lg shadow-sm border border-slate-200">
@@ -100,9 +80,7 @@
       <ng-container cdkColumnDef="actions">
         <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">ACTIONS</th>
         <td cdk-cell *cdkCellDef="let element" class="px-6 py-3 text-text-600"> 
-          <button (click)="exitSession(element.id)" class="px-4 py-2 rounded-md bg-danger-900 text-white font-bold cursor-pointer">
-            Exit
-          </button>
+          <app-button variant="danger" (click)="exitSession(element.id)">Exit</app-button>
         </td>
       </ng-container>
 
@@ -176,5 +154,31 @@
       <tr cdk-header-row *cdkHeaderRowDef="EXITED_SESSION_COLUMNS" class="bg-secondary"></tr>
       <tr cdk-row *cdkRowDef="let row; columns: EXITED_SESSION_COLUMNS;" class="border-b border-slate-200 hover:bg-emerald-50 transition-colors"></tr>
     </table>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+    <div class="flex items-center justify-between bg-white rounded-lg shadow-sm border border-slate-200 p-5">
+      <div>
+        <p class="text-text-300">Revenue Today</p>
+        <p class="text-text-900 font-bold mt-1">₱12.00</p>
+      </div>
+      <img src="/images/icons/revenue.png" alt="Revenue Icon" class="h-16">
+    </div>
+
+    <div class="flex items-center justify-between bg-white rounded-lg shadow-sm border border-slate-200 p-5">
+      <div>
+        <p class="text-text-300">Currently Parked</p>
+        <p class="text-text-900 font-bold mt-1">3 Vehicles</p>
+      </div>
+      <img src="/images/icons/parked.png" alt="Revenue Icon" class="h-16">
+    </div>
+
+    <div class="flex items-center justify-between bg-white rounded-lg shadow-sm border border-slate-200 p-5">
+      <div>
+        <p class="text-text-300">Total Entries Today</p>
+        <p class="text-text-900 font-bold mt-1">3</p>
+      </div>
+      <img src="/images/icons/entries.png" alt="Entries Icon" class="h-16">
+    </div>
   </div>
 </section>

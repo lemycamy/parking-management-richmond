@@ -10,15 +10,29 @@ import { InMemoryCache } from '@apollo/client';
 import { provideLuxonDateAdapter } from '@angular/material-luxon-adapter';
 import { DEFAULT_DATE_FORMAT } from './shared/utils/date-format';
 
+import * as echarts from 'echarts/core';
+import { LineChart, BarChart, PieChart } from 'echarts/charts';
+import { CanvasRenderer } from 'echarts/renderers';
+import { provideEchartsCore } from 'ngx-echarts';
+import {
+  TooltipComponent,
+  VisualMapComponent,
+  LegendComponent,
+  GridComponent
+} from 'echarts/components';
+import { environment } from '../environments/environment';
+echarts.use([LineChart, BarChart, GridComponent, VisualMapComponent, LegendComponent, TooltipComponent, CanvasRenderer, PieChart]);
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideLuxonDateAdapter(DEFAULT_DATE_FORMAT),
     provideBrowserGlobalErrorListeners(),
+    provideEchartsCore({ echarts }),
     provideRouter(routes), provideHttpClient(), provideApollo(() => {
       const httpLink = inject(HttpLink);
       return {
         link: httpLink.create({
-          uri: 'http://192.168.5.53:3000/graphql',
+          uri: environment.apiBaseUrl,
         }),
         cache: new InMemoryCache(),
       };

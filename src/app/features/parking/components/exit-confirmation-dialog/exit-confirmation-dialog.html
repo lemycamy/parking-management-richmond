@@ -7,9 +7,7 @@
   </p>
 
   <div class="flex gap-4 justify-end" mat-dialog-actions>
-    <button mat-button type="button" (click)="onCancel()" mat-stroked-button>Cancel</button>
-    <button mat-raised-button color="warn" type="button" (click)="onConfirm()">
-      Archive
-    </button>
+    <app-button variant="neutral" (click)="cancel()">Cancel</app-button>
+    <app-button variant="danger" (click)="confirmExit()">Confirm Exit</app-button>
   </div>
 </mat-dialog-content>

@@ -1,10 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { MatDialogContent, MatDialogRef } from '@angular/material/dialog';
+import { Button } from '../../../../shared/ui/button/button';
 
 @Component({
   selector: 'app-exit-confirmation-dialog',
   imports: [
-    MatDialogContent
+    MatDialogContent,
+    Button
   ],
   templateUrl: './exit-confirmation-dialog.html',
   styleUrl: './exit-confirmation-dialog.css',
@@ -12,11 +14,11 @@ import { MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 export class ExitConfirmationDialog {
   private dialogRef = inject(MatDialogRef<ExitConfirmationDialog>);
 
-  onCancel(): void {
+  cancel(): void {
     this.dialogRef.close(false);
   }
 
-  onConfirm(): void {
+  confirmExit(): void {
     this.dialogRef.close(true);
   }
 }

@@ -19,22 +19,42 @@ export class ParkingService {
     limit: number = 10,
   ): Observable<PaginatedResponse<ParkingSession>> {
     return this.apollo
-      .query<ParkingSessionsByParkingStateResponse, ParkingSessionsVariables>({
+      .watchQuery<ParkingSessionsByParkingStateResponse, ParkingSessionsVariables>({
       query: GET_PARKING_SESSIONS_BY_PARKING_STATE,
       variables: { page, limit, parkingState: parkingState },
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'network-only',  
     })  
+    .valueChanges
     .pipe(
-      map((result) => result.data?.parkingSessionsByParkingState ?? { data: [], meta: { total: 0, page: 0, limit: 0, totalPages: 0, hasNextPage: false, hasPreviousPage: false } })
+      map(result => {
+        result.data?.parkingSessionsByParkingState;
+        const raw = result.data?.parkingSessionsByParkingState;
+
+        if (!raw) {
+          return {
+            data: [] as ParkingSession[],
+            meta: { total: 0, page: 0, limit: 0, totalPages: 0, hasNextPage: false, hasPreviousPage: false }
+          };
+        }
+
+        return {
+          data: (raw.data || []) as ParkingSession[],
+          meta: raw.meta
+        } as PaginatedResponse<ParkingSession>;
+      })
     );
   }
 
-  createParkingSession(input: any) {
+  createParkingSession(input: any, refetchActive: boolean = true) {
     return this.apollo.mutate({
       mutation: CREATE_PARKING_SESSION,
-      variables: {
-        input
-      }
+      variables: { input },
+      refetchQueries: refetchActive
+      ? [{
+          query: GET_PARKING_SESSIONS_BY_PARKING_STATE,
+          variables: { parkingState: "ACTIVE", page: 1, limit: 10 }
+        }]
+      : [],
     })
   }
 
@@ -43,5 +63,9 @@ export class ParkingService {
       mutation: EXIT_PARKING_SESSION,
       variables: { id },
     });
+  }
+
+  print(text: string) {
+    
   }
 }

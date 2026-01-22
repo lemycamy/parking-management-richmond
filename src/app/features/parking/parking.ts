@@ -16,6 +16,8 @@ import { Car, LucideAngularModule, Motorbike, ScanQrCode } from 'lucide-angular'
 import { PaginatedResponse } from '../../shared/types/paginated-response.type';
 import { ParkingEntryForm } from "./components/parking-entry-form/parking-entry-form";
 import { ExitConfirmationDialog } from './components/exit-confirmation-dialog/exit-confirmation-dialog';
+import { Button } from '../../shared/ui/button/button';
+import { RouterLink } from '@angular/router';
 
 type SessionState = 'ACTIVE' | 'EXITED';
 
@@ -28,7 +30,9 @@ type SessionState = 'ACTIVE' | 'EXITED';
     MatInputModule,
     LucideAngularModule,
     ParkingEntryForm,
-    MatDialogModule
+    MatDialogModule,
+    RouterLink,
+    Button
   ],
   templateUrl: './parking.html',
   styleUrl: './parking.css',
