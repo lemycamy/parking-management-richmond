@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -18,6 +18,7 @@ import { ParkingEntryForm } from "./components/parking-entry-form/parking-entry-
 import { ExitConfirmationDialog } from './components/exit-confirmation-dialog/exit-confirmation-dialog';
 import { Button } from '../../shared/ui/button/button';
 import { RouterLink } from '@angular/router';
+import { MatPaginator } from '@angular/material/paginator';
 
 type SessionState = 'ACTIVE' | 'EXITED';
 
@@ -32,7 +33,8 @@ type SessionState = 'ACTIVE' | 'EXITED';
     ParkingEntryForm,
     MatDialogModule,
     RouterLink,
-    Button
+    Button,
+    MatPaginator
   ],
   templateUrl: './parking.html',
   styleUrl: './parking.css',
@@ -45,6 +47,9 @@ export class ParkingComponent {
 
   readonly ACTIVE_SESSION_COLUMNS: string[] = ['vehicleType', 'plateNumber', 'enteredAt', 'status', 'actions'] as const;
   readonly EXITED_SESSION_COLUMNS: string[] = ['vehicleType', 'plateNumber', 'enteredAt', 'exitedAt', 'duration', 'fee', 'status'] as const;
+
+  @ViewChild('activeSessionsPaginator') activeSessionsPaginator!: MatPaginator;
+  @ViewChild('exitedSessionsPaginator') exitedSessionsPaginator!: MatPaginator;
 
   private parkingService = inject(ParkingService);
   private destroy$ = new Subject<void>();
@@ -65,6 +70,11 @@ export class ParkingComponent {
   ngOnInit(): void {
     this.loadSessions('ACTIVE');
     this.loadSessions('EXITED');
+  }
+
+  ngAfterViewInit() {
+    this.activeSessionsDataSource.paginator = this.activeSessionsPaginator;
+    this.exitedSessionsDataSource.paginator = this.exitedSessionsPaginator;
   }
 
   ngOnDestroy(): void {
@@ -121,7 +131,7 @@ export class ParkingComponent {
     this.activeSessionsDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  applyExitSessionsFilter(event: Event): void {
+  applyExitedSessionsFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.exitedSessionsDataSource.filter = filterValue.trim().toLowerCase();
   }

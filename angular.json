@@ -3,7 +3,7 @@
   "version": 1,
   "cli": {
     "packageManager": "npm",
-    "analytics": "72e142e2-f58f-4c6e-8278-00d6768db57c",
+    "analytics": "72e142e2-f58f-4c6e-8278-00d6768db57c"
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -32,6 +32,12 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
