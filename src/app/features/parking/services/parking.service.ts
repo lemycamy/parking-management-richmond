@@ -23,7 +23,7 @@ export class ParkingService {
       query: GET_PARKING_SESSIONS_BY_PARKING_STATE,
       variables: { page, limit, parkingState: parkingState },
       fetchPolicy: 'network-only',  
-    })  
+    })
     .valueChanges
     .pipe(
       map(result => {
@@ -63,9 +63,5 @@ export class ParkingService {
       mutation: EXIT_PARKING_SESSION,
       variables: { id },
     });
-  }
-
-  print(text: string) {
-    
   }
 }

@@ -10,7 +10,7 @@ import { Banknote, Car, Clock, LucideAngularModule, TrendingUp,  } from 'lucide-
 import { NgxEchartsDirective } from 'ngx-echarts';
 import { EChartsCoreOption } from 'echarts/core';
 
-import { getLastMonthDate } from '../../shared/utils/date';
+import { getLastMonthDate } from '../../shared/utils/date.utils';
 import { DASHBOARD_DATE_FORMAT } from '../../shared/utils/date-format';
 import { StatCard } from "../../shared/components/stat-card/stat-card";
 

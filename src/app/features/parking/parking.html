@@ -35,13 +35,13 @@
   <div class="flex gap-3 items-center">
     <mat-form-field appearance="outline" class="w-full h-full mt-6">
       <mat-label>Filter</mat-label>
-      <input matInput (keyup)="applyActiveSessionsFilter($event)" placeholder="Search by Plate or vehicle type..." #input>
+      <input matInput (keyup)="applyFilter($event, 'ACTIVE')" placeholder="Search by Plate or vehicle type..." #input>
     </mat-form-field>
     <lucide-angular [img]="ScanQrCode" class="w-12 h-12 cursor-pointer" routerLink="parking/exit-scan"></lucide-angular>
   </div>
 
   <div class="w-full overflow-x-auto bg-white rounded-lg shadow-sm border border-slate-200">
-    <table cdk-table [dataSource]="activeSessionsDataSource" class="w-full border-collapse">
+    <table cdk-table [dataSource]="sessionManagers.active.dataSource" class="w-full border-collapse">
       <ng-container cdkColumnDef="vehicleType">
         <th cdk-header-cell *cdkHeaderCellDef></th>
         <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 font-bold text-sm w-12">
@@ -61,7 +61,7 @@
       <ng-container cdkColumnDef="enteredAt">
         <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">ENTERED AT</th>
         <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 text-sm">
-          {{ element.enteredAt | date:'hh:mm:ss a' }}
+          {{ element.enteredAt | date:'hh:mm a' }}
         </td>
       </ng-container>
 
@@ -80,7 +80,7 @@
       <ng-container cdkColumnDef="actions">
         <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">ACTIONS</th>
         <td cdk-cell *cdkCellDef="let element" class="px-6 py-3 text-text-600"> 
-          <app-button variant="danger" (click)="exitSession(element.id)">Exit</app-button>
+          <app-button variant="danger" (click)="exitSession(element)">Exit</app-button>
         </td>
       </ng-container>
 
@@ -100,11 +100,11 @@
 
   <mat-form-field appearance="outline" class="w-full h-full mt-6">
     <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyExitedSessionsFilter($event)" placeholder="Search by Plate or vehicle type..." #input>
+    <input matInput (keyup)="applyFilter($event, 'EXITED')" placeholder="Search by Plate or vehicle type..." #input>
   </mat-form-field>
   
   <div class="w-full overflow-x-auto bg-white rounded-lg shadow-sm border border-slate-200">
-    <table cdk-table [dataSource]="exitedSessionsDataSource" class="w-full border-collapse">
+    <table cdk-table [dataSource]="sessionManagers.exited.dataSource" class="w-full border-collapse">
       <ng-container cdkColumnDef="vehicleType">
         <th cdk-header-cell *cdkHeaderCellDef></th>
         <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 font-bold text-sm w-12">
@@ -124,7 +124,7 @@
       <ng-container cdkColumnDef="enteredAt">
         <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">ENTERED AT</th>
         <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 text-sm">
-          {{ element.enteredAt | date:'hh:mm:ss a' }}
+          {{ element.enteredAt | date:'hh:mm a' }}
         </td>
       </ng-container>
 
