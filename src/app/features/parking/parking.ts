@@ -42,7 +42,7 @@ type SessionState = 'ACTIVE' | 'EXITED';
   styleUrl: './parking.css',
 })
 
-export class ParkingComponent {
+export class Parking {
   readonly Car = Car;
   readonly Motorbike = Motorbike;
   readonly ScanQrCode = ScanQrCode;

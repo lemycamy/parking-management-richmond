@@ -5,6 +5,6 @@ export enum PaymentStatusEnum {
 }
 
 export enum VehicleTypeEnum {
-  CAR = 'CAR',
-  MOTOR = 'MOTOR',
+  VEHICLE = 'VEHICLE',
+  MOTORCYCLE = 'MOTORCYCLE',
 }

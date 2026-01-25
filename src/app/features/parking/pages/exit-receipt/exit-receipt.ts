@@ -20,7 +20,7 @@ const ELEMENT_DATA: any[] = [
   templateUrl: './exit-receipt.html',
   styleUrl: './exit-receipt.css',
 })
-export class ExitReceiptComponent {
+export class ExitReceipt {
   ELEMENT_DATA = [
     {
       id: '57e0f041-3597-4a2e-b9ea-466861bd2562',

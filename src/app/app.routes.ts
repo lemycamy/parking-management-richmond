@@ -1,34 +1,24 @@
 import { Routes } from '@angular/router';
-import { ParkingComponent } from './features/parking/parking';
-import { Reports } from './features/reports/reports';
-import { ExitReceiptComponent } from './features/parking/pages/exit-receipt/exit-receipt';
+import { Home } from './features/home/home';
 import { DashboardComponent } from './features/dashboard/dashboard';
-import { DailyBreakdown } from './features/reports/pages/daily-breakdown/daily-breakdown';
-import { ExitScan } from './features/parking/pages/exit-scan/exit-scan';
 
 export const routes: Routes = [
-    { 
-        path: 'parking', 
-        component: ParkingComponent
-    },
     {
-        path: 'parking/exit-receipt',
-        component: ExitReceiptComponent
+        path: '',
+        component: Home
     },
     {
         path: 'dashboard',
         component: DashboardComponent
     },
-    { 
-        path: 'reports', 
-        component: Reports
+    {
+        path: 'parking',    
+        loadChildren: () =>
+            import('./features/parking/parking.routes').then(m => m.parkingRoutes)
     },
     {
-        path: 'reports/daily-breakdown',
-        component: DailyBreakdown
-    },
-    {
-        path: 'parking/exit-scan',
-        component: ExitScan
+        path: 'reports',    
+        loadChildren: () =>
+            import('./features/reports/reports.routes').then(m => m.reportsRoutes)
     },
 ];
