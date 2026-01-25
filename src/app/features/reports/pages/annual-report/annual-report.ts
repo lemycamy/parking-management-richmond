@@ -15,20 +15,20 @@ import { MAT_DATE_FORMATS, DateAdapter } from '@angular/material/core';
 import { LuxonDateAdapter, MatLuxonDateModule } from '@angular/material-luxon-adapter';
 
 
-export const MONTH_YEAR_FORMATS = {
+export const YEAR_ONLY_FORMATS = {
   parse: {
-    dateInput: 'MMMM yyyy',
+    dateInput: 'yyyy',
   },
   display: {
-    dateInput: 'MMMM yyyy',
-    monthYearLabel: 'MMMM yyyy',
-    dateA11yLabel: 'MMMM yyyy',
-    monthYearA11yLabel: 'MMMM yyyy',
+    dateInput: 'yyyy',
+    monthYearLabel: 'yyyy',
+    dateA11yLabel: 'yyyy',
+    monthYearA11yLabel: 'yyyy',
   },
 };
 
 @Component({
-  selector: 'app-monthly-summary',
+  selector: 'app-annual-report',
   imports: [
     MatFormFieldModule,
     MatInputModule,
@@ -39,17 +39,17 @@ export const MONTH_YEAR_FORMATS = {
     LucideAngularModule,
     CdkTableModule,
     NgxEchartsDirective,
-    MatLuxonDateModule,
+    MatLuxonDateModule
   ],
-  templateUrl: './monthly-summary.html',
-  styleUrl: './monthly-summary.css',
+  templateUrl: './annual-report.html',
+  styleUrl: './annual-report.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     { provide: DateAdapter, useClass: LuxonDateAdapter },
-    { provide: MAT_DATE_FORMATS, useValue: MONTH_YEAR_FORMATS },
+    { provide: MAT_DATE_FORMATS, useValue: YEAR_ONLY_FORMATS },
   ],
 })
-export class MonthlySummary {
+export class AnnualReport {
   readonly Banknote = Banknote;
   readonly Car = Car;
   readonly Clock = Clock;
@@ -58,9 +58,8 @@ export class MonthlySummary {
 
   readonly date = new FormControl(DateTime.now());
 
-  
   openReport() {
-    console.log('open monthly report');
+    console.log('open annual report');
   }
 
   setMonthAndYear(selected: DateTime, datepicker: any) {
@@ -69,11 +68,12 @@ export class MonthlySummary {
     this.date.setValue(
       current.set({
         year: selected.year,
-        month: selected.month,
+        month: 1,
         day: 1,
       })
     );
 
+    datepicker._goToDateInView(selected, 'multi-year');
     datepicker.close();
   }
 
@@ -82,9 +82,6 @@ export class MonthlySummary {
 
   vehicleOption = {
     backgroundColor: '#FFF',
-    tooltip: {
-      trigger: 'item'
-    },
     legend: {
       orient: 'horizontal',
       left: 'left'
@@ -110,13 +107,16 @@ export class MonthlySummary {
   };
 
 
-  weekOneOption = {
-    legend:{
-      data: ['Car Revenue', 'Motor Revenue']
+  revenueOption = {
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+      data: ['Car Revenue', 'Motor Revenue', 'Total Revenue']
     },
     xAxis: {
       type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     },
     yAxis: {
       type: 'value'
@@ -124,88 +124,21 @@ export class MonthlySummary {
     series: [
       {
         name: 'Car Revenue',
-        data: [1950, 2100, 1750, 850, 950, 1350, 1350],
-        type: 'bar'
+        data: [1500, 2350, 2200, 2150, 1350, 1550, 2600, 2550, 2250, 2100, 1850, 1950],
+        type: 'line'
       },
       {
         name: 'Motor Revenue',
-        data: [1200, 1800, 1500, 600, 700, 1100, 1200],
-        type: 'bar'
-      }
-    ]
-  };
-  weekTwoOption = {
-    legend:{
-      data: ['Car Revenue', 'Motor Revenue']
-    },
-    xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    },
-    yAxis: {
-      type: 'value'
-    },
-    series: [
-      {
-        name: 'Car Revenue',
-        data: [1400, 2250, 1600, 900, 1000, 1450, 1550],
-        type: 'bar'
+        data: [1300, 2000, 1200, 2125, 1250, 1400, 2250, 2500, 1850, 1950, 1550, 1650],
+        type: 'line'
       },
       {
-        name: 'Motor Revenue',
-        data: [1200, 2000, 1500, 800, 700, 1100, 1300],
-        type: 'bar'
-      }
-    ]
-  };
-  weekThreeOption = {
-    legend:{
-      data: ['Car Revenue', 'Motor Revenue']
-    },
-    xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    },
-    yAxis: {
-      type: 'value'
-    },
-    series: [
-      {
-        name: 'Car Revenue',
-        data: [1500, 2350, 2200, 2150, 1350, 1550, 2600],
-        type: 'bar'
+        name: 'Total Revenue',
+        data: [1800, 4350, 3200, 4175, 2600, 1950, 2850, 5050, 4100, 4050, 3400, 3600],
+        type: 'line'
       },
-      {
-        name  : 'Motor Revenue',
-        data: [1200, 2000, 1500, 800, 700, 1100, 1300],
-        type: 'bar'
-      }
     ]
-  };
-  weekFourOption = {
-    legend:{
-      data: ['Car Revenue', 'Motor Revenue']
-    },
-    xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    },
-    yAxis: {
-      type: 'value'
-    },
-    series: [
-      {
-        name: 'Car Revenue',
-        data: [2000, 4350, 3200, 4175, 2600, 1950, 2850],
-        type: 'bar'
-      },
-      {
-        name: 'Motor Revenue',
-        data: [1200, 2000, 1500, 800, 700, 1100, 1300],
-        type: 'bar'
-      }
-    ]
-  };
+};
 
 
 
@@ -219,7 +152,7 @@ export class MonthlySummary {
     console.log('on chart init:', e);
   }
 
-  readonly COLUMNS: string[] = ['loggedDate', 'carAmount', 'motorAmount', 'duration', 'totalRevenue', 'view'] as const;
+  readonly COLUMNS: string[] = ['loggedMonth', 'carAmount', 'motorAmount', 'duration', 'totalRevenue', 'view'] as const;
   dataSource = new MatTableDataSource<any>(['test-element']);
 
   ngOnInit(): void {

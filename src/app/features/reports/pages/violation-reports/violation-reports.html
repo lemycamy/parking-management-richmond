@@ -1,0 +1,69 @@
+<section class="main-container">
+  <h1 class="text-3xl font-medium text-text-900 mt-6">Violation Reports</h1>
+
+  <mat-form-field appearance="outline" class="mt-6">
+    <mat-label>Verbose datepicker</mat-label>
+    <input matInput [matDatepicker]="dp" [formControl]="date">
+    <mat-hint>YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+    <mat-datepicker #dp
+      startView="multi-year"
+      (monthSelected)="setMonthAndYear($event, dp)"
+      panelClass="month-picker"></mat-datepicker>
+  </mat-form-field>
+
+  <div class="mt-6 grid md:grid-cols-4 gap-6">
+
+    <app-stat-card
+      [icon]="Car"
+      label="Total Violators"
+      [value]="1"
+      iconBgClass="bg-red-200 text-red-700"
+    ></app-stat-card>
+  </div>
+
+  <h2 class="text-2xl font-semibold mt-6">Violation Logs</h2>
+  <div class="w-full overflow-x-auto bg-white rounded-lg shadow-sm border border-slate-200 mt-2">
+    <table cdk-table [dataSource]="dataSource" class="w-full border-collapse">
+      <ng-container cdkColumnDef="loggedDate">
+        <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">DATE</th>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 font-bold text-sm">01-25-2026</td>
+      </ng-container>
+
+      <ng-container cdkColumnDef="plateNumber">
+        <th cdk-header-cell *cdkHeaderCellDef class="text-center px-6 py-4 text-xs text-white whitespace-nowrap">PLATE NUMBER</th>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 text-sm">WAP 1738</td>
+      </ng-container>
+
+      <ng-container cdkColumnDef="vehicleTypeOf">
+        <th cdk-header-cell *cdkHeaderCellDef class="text-center px-6 py-4 text-xs text-white whitespace-nowrap">VEHICLE TYPE</th>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 text-sm">Car</td>
+      </ng-container>
+
+      <ng-container cdkColumnDef="violationTypeOf">
+        <th cdk-header-cell *cdkHeaderCellDef class="text-center px-6 py-4 text-xs text-white whitespace-nowrap">VIOLATION</th>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-red-700 text-center text-text-600 text-sm">Ugly Vehicle</td>
+      </ng-container>
+
+      <ng-container cdkColumnDef="fineAmount">
+        <th cdk-header-cell *cdkHeaderCellDef class="text-center px-6 py-4 text-xs text-white whitespace-nowrap">FINE</th>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 font-bold text-sm"> P 500.00 </td>
+      </ng-container>
+
+      <ng-container cdkColumnDef="view">
+        <th cdk-header-cell *cdkHeaderCellDef class="text-right px-6 py-4 text-xs text-white whitespace-nowrap">VIEW</th>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-right text-text-600">
+            <div class="flex items-center justify-end ">
+                <lucide-angular [img]="Eye" class="w-5 h-5 hover:cursor-pointer" (click)="openReport()"></lucide-angular>
+            </div>
+        </td>
+      </ng-container>
+
+
+      <tr cdk-header-row *cdkHeaderRowDef="COLUMNS" class="bg-secondary"></tr>
+      <tr cdk-row *cdkRowDef="let row; columns: COLUMNS;" class="border-b border-slate-200 hover:bg-emerald-50 transition-colors"></tr>
+    </table>
+  </div>
+
+  
+</section>
