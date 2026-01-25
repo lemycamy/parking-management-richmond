@@ -1,0 +1,23 @@
+<section class="login-container">
+  <div class="main-container flex justify-end pt-8 md:pt-40">
+    <div class="md:w-1/3 shadow-md border border-slate-300 bg-white p-8 rounded-md">
+      <img src="/images/brand-logo-green-variant.png" alt="Brand Logo" class="w-24 mx-auto">
+      <h1 class="text-lg font-semibold leading-relaxed text-center mt-2">Sign in to Paradise Parking.</h1>
+      <p class="mb-8 mt-1 leading-relaxed text-center">Lorem ipsum dolor sit.</p>
+    
+      <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-4">
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" placeholder="Username  ">
+        </mat-form-field>
+
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" placeholder="Password">
+        </mat-form-field>
+
+        <button class="bg-primary text-white w-full py-3 rounded-md font-bold cursor-pointer hover:bg-emerald-700" type="submit">Sign in</button>
+      </form>
+    </div>
+  </div>
+</section>

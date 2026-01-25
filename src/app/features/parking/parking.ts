@@ -15,12 +15,13 @@ import { ParkingService } from './services/parking.service';
 import { QueryState } from '../../core/models/graphql-response.model';
 import { ParkingSession } from './models/parking-session.model';
 
-import { Car, Import, LucideAngularModule, Motorbike, ScanQrCode } from 'lucide-angular';
+import { Car, LucideAngularModule, Motorbike, ScanQrCode } from 'lucide-angular';
 import { PaginatedResponse } from '../../shared/types/paginated-response.type';
 import { ParkingEntryForm } from "./components/parking-entry-form/parking-entry-form";
 import { ExitConfirmationDialog } from './components/exit-confirmation-dialog/exit-confirmation-dialog';
 import { Button } from '../../shared/ui/button/button';
 import { PARKING_MESSAGES } from './constants/parking.constants';
+import { ParkingStatistics } from './graphql/parking-sessions.queries';
 
 type SessionState = 'ACTIVE' | 'EXITED';
 
@@ -71,9 +72,13 @@ export class Parking {
     }
   };
 
+  stats: ParkingStatistics | null = null;
+  private statsQueryRef = this.parkingService.getParkingStatistics();
+
   ngOnInit(): void {
     this.loadSessions('ACTIVE');
     this.loadSessions('EXITED');
+    this.fetchParkingStatistics();
   }
 
   ngAfterViewInit() {
@@ -107,6 +112,34 @@ export class Parking {
     });
   }
 
+  fetchParkingStatistics(): void {
+    this.parkingService.getParkingStatistics().valueChanges.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: ({ data }) => {
+        const stats = data?.parkingStatistics;
+
+        if (!stats) {
+          this.stats = null;
+          return;
+        }
+
+        this.stats = {
+          parkedVehicles: stats.parkedVehicles ?? 0,
+          parkedMotorcycles: stats.parkedMotorcycles ?? 0,
+          revenueToday: stats.revenueToday ?? 0,
+          currentlyParked: stats.currentlyParked ?? 0,
+          totalEntriesToday: stats.totalEntriesToday ?? 0,
+        };
+
+        console.log(this.stats);
+      },
+      error: (err) => {
+        console.error('Error fetching parking statistics:', err);
+      }
+    })
+  }
+
   exitSession(element: any): void {
     const dialogRef = this.dialog.open(ExitConfirmationDialog);
 
@@ -120,8 +153,6 @@ export class Parking {
       this.parkingService.exitParkingSession(element.id).subscribe({
         next: (response) => {
           this.snackBar.open(PARKING_MESSAGES.EXIT_SUCCESS, 'Close');
-          this.loadSessions('ACTIVE');
-          this.loadSessions('EXITED');  
         },
         error: (error) => {
           console.error('Error exiting session:', error);

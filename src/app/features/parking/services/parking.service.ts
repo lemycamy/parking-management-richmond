@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { GET_PARKING_SESSIONS_BY_PARKING_STATE } from '../graphql/parking-sessions.queries';
+import { GET_PARKING_SESSIONS_BY_PARKING_STATE, GET_PARKING_STATISTICS, ParkingStatisticsResponse } from '../graphql/parking-sessions.queries';
 import { map, Observable } from 'rxjs';
 import { ParkingSession, ParkingSessionsByParkingStateResponse, ParkingSessionsVariables } from '../models/parking-session.model';
 import { PaginatedResponse } from '../../../shared/types/paginated-response.type';
@@ -49,12 +49,16 @@ export class ParkingService {
     return this.apollo.mutate({
       mutation: CREATE_PARKING_SESSION,
       variables: { input },
-      refetchQueries: refetchActive
-      ? [{
+      refetchQueries: [
+        ...(refetchActive ? [{
           query: GET_PARKING_SESSIONS_BY_PARKING_STATE,
           variables: { parkingState: "ACTIVE", page: 1, limit: 10 }
-        }]
-      : [],
+        }] : []),
+
+        {
+          query: GET_PARKING_STATISTICS,
+        }
+      ],
     })
   }
 
@@ -62,6 +66,28 @@ export class ParkingService {
     return this.apollo.mutate({
       mutation: EXIT_PARKING_SESSION,
       variables: { id },
+
+      refetchQueries: [
+        {
+          query: GET_PARKING_SESSIONS_BY_PARKING_STATE,
+          variables: { parkingState: "ACTIVE", page: 1, limit: 10 }
+        },
+        {
+          query: GET_PARKING_SESSIONS_BY_PARKING_STATE,
+          variables: { parkingState: "EXITED", page: 1, limit: 10 }
+        },
+        {
+          query: GET_PARKING_STATISTICS,
+        }
+      ],
+
+      awaitRefetchQueries: true,
     });
+  }
+
+  getParkingStatistics() {
+    return this.apollo.watchQuery<ParkingStatisticsResponse>({
+      query: GET_PARKING_STATISTICS,
+    })
   }
 }

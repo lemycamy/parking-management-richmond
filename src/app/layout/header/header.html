@@ -10,8 +10,18 @@
         <li class="cursor-pointer" routerLink="parking">Parking</li>
         <li class="cursor-pointer" routerLink="reports">Reports</li>
       </ul>
-  
-      <img src="https://i.pinimg.com/736x/56/af/7e/56af7ed2c15a58fed21e8ffd0744bb1e.jpg" alt="ace" class="w-12 h-12 rounded-full border-primary border cursor-pointer">
+
+      @if (authService.isLoggedIn()) {
+        <app-button 
+          variant="danger"
+          (click)="authService.logout()"
+        >Logout</app-button>
+      } @else {
+        <app-button 
+          variant="primary"
+          routerLink="/login"
+        >Login</app-button>
+      }
     </div>
   </nav>
 </header>

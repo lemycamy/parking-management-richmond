@@ -32,3 +32,27 @@ export const GET_PARKING_SESSIONS_BY_PARKING_STATE = gql`
     }
   }
 `;
+
+export const GET_PARKING_STATISTICS = gql`
+  query GetParkingStatistics {
+    parkingStatistics {
+      parkedVehicles
+      parkedMotorcycles
+      revenueToday
+      currentlyParked
+      totalEntriesToday
+    }
+  }
+`;
+
+export interface ParkingStatistics {
+  parkedVehicles: number;
+  parkedMotorcycles: number;
+  revenueToday: number;
+  currentlyParked: number;
+  totalEntriesToday: number;
+}
+
+export interface ParkingStatisticsResponse {
+  parkingStatistics: ParkingStatistics;
+}

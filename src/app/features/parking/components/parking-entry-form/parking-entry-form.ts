@@ -19,7 +19,6 @@ import { ParkingService } from '../../services/parking.service';
     ReactiveFormsModule,
     MatSelectModule,
     MatInputModule,
-    MatFormFieldModule
   ],
   templateUrl: './parking-entry-form.html',
   styleUrl: './parking-entry-form.css',

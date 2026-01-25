@@ -28,11 +28,13 @@ export const appConfig: ApplicationConfig = {
     provideLuxonDateAdapter(DEFAULT_DATE_FORMAT),
     provideBrowserGlobalErrorListeners(),
     provideEchartsCore({ echarts }),
-    provideRouter(routes), provideHttpClient(), provideApollo(() => {
+    provideRouter(routes), 
+    provideHttpClient(), 
+    provideApollo(() => {
       const httpLink = inject(HttpLink);
       return {
         link: httpLink.create({
-          uri: environment.apiBaseUrl,
+          uri: environment.apiBaseUrl + '/graphql',
         }),
         cache: new InMemoryCache(),
       };
