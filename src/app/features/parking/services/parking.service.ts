@@ -54,7 +54,6 @@ export class ParkingService {
           query: GET_PARKING_SESSIONS_BY_PARKING_STATE,
           variables: { parkingState: "ACTIVE", page: 1, limit: 10 }
         }] : []),
-
         {
           query: GET_PARKING_STATISTICS,
         }
