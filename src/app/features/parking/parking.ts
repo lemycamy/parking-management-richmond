@@ -149,6 +149,7 @@ export class Parking {
       if (!confirmed) return;
 
       console.log("exited")
+      console.log("")
 
       this.parkingService.exitParkingSession(element.id).subscribe({
         next: (response) => {

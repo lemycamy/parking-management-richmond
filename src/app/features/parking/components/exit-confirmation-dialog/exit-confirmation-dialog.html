@@ -1,13 +1,25 @@
 <mat-dialog-content class="default-modal w-11/12 md:w-auto">
-  <h2 mat-dialog-title>Confirm Exit</h2>
+  <div class="flex flex-col gap-2">
+    <h2 mat-dialog-title>Confirm Exit</h2>
+  
+    <div class="flex flex-col mb-3">
+      <div class="flex gap-2"><span>PLATE NUMBER:</span> <span class="font-semibold">WAP 1738</span> </div>
+      <div class="flex gap-2"><span>VEHICLE TYPE:</span> <span class="">CAR</span> </div>
+      <div class="flex gap-2"><span>DURATION:</span> <span class="">120 Mins</span> </div>
+    </div>
+    <div class="flex flex-col mb-3">
+      <mat-checkbox [checked]="checkStatus" (change)="onCheckboxChange($event)">PWD/SC Viable</mat-checkbox>
+      @if(checkStatus){
+        <input [formControl]="idPWDSC" placeholder="Enter PWD/SC ID Number" class="border rounded-md p-2 text-sm"/>
+      }
+    </div>
+    <div>
+      <div class="flex gap-2"><span>PARKING FEE:</span> <span class="font-semibold">P {{ parkingFee }}</span> </div>
+    </div>
 
-  <p class="my-4">
-    Are you sure you want to archive this attendee?
-    This action can be undone from the archive list.
-  </p>
-
-  <div class="flex gap-4 justify-end" mat-dialog-actions>
-    <app-button variant="neutral" (click)="cancel()">Cancel</app-button>
-    <app-button variant="danger" (click)="confirmExit()">Confirm Exit</app-button>
+    <div class="flex gap-4 justify-end" mat-dialog-actions>
+      <app-button variant="neutral" (click)="cancel()">Cancel</app-button>
+      <app-button variant="danger" (click)="confirmExit()">Confirm Exit</app-button>
+    </div>
   </div>
 </mat-dialog-content>

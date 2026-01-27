@@ -17,21 +17,21 @@ export const routes: Routes = [
     },
     {
         path: 'dashboard',
-        canActivate: [RoleGuard],
-        data: { roles: ['admin'] },
+        // canActivate: [RoleGuard],
+        // data: { roles: ['admin'] },
         component: DashboardComponent
     },
     {
         path: 'parking',    
-        canActivate: [RoleGuard],
-        data: { roles: ['admin', 'user'] },
+        // canActivate: [RoleGuard],
+        // data: { roles: ['admin', 'user'] },
         loadChildren: () =>
             import('./features/parking/parking.routes').then(m => m.parkingRoutes)
     },
     {
         path: 'reports',   
-        canActivate: [RoleGuard],
-        data: { roles: ['admin'] },
+        // canActivate: [RoleGuard],
+        // data: { roles: ['admin'] },
         loadChildren: () =>
             import('./features/reports/reports.routes').then(m => m.reportsRoutes)
     },

@@ -5,6 +5,7 @@ import { DailyBreakdown } from "./pages/daily-breakdown/daily-breakdown";
 import { MonthlySummary } from "./pages/monthly-summary/monthly-summary";
 import { AnnualReport } from "./pages/annual-report/annual-report";
 import { ViolationReports } from "./pages/violation-reports/violation-reports";
+import { MonthlyParking } from "./pages/monthly-parking/monthly-parking";
 
 export const reportsRoutes: Routes = [
   {
@@ -26,5 +27,9 @@ export const reportsRoutes: Routes = [
   {
     path: 'violation-reports',
     component: ViolationReports
+  },
+  {
+    path: 'monthly-parking',
+    component: MonthlyParking
   }
 ]

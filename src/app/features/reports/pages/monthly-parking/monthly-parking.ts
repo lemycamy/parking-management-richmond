@@ -1,0 +1,102 @@
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { provideLuxonDateAdapter } from '@angular/material-luxon-adapter';
+import { DateTime } from 'luxon';
+import { Banknote, Car, Clock, LucideAngularModule, Motorbike } from 'lucide-angular';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { CdkTableModule } from '@angular/cdk/table';
+
+import { StatCard } from "../../../../shared/components/stat-card/stat-card";
+import { MatTableDataSource } from '@angular/material/table';
+import { DatePipe, NgClass } from '@angular/common';
+import { NgxEchartsDirective } from 'ngx-echarts';
+import type { ECharts } from 'echarts/core';
+import { Button } from "../../../../shared/ui/button/button";
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
+import { AddMonthlyDialog } from '../../components/add-monthly-dialog/add-monthly-dialog';
+
+
+@Component({
+  selector: 'app-monthly-parking',
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    FormsModule,
+    ReactiveFormsModule,
+    StatCard,
+    LucideAngularModule,
+    CdkTableModule,
+    DatePipe,
+    NgClass,
+    NgxEchartsDirective,
+    Button,
+    MatDialogContent,
+    MatCheckboxModule
+],
+  templateUrl: './monthly-parking.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+
+export class MonthlyParking {
+  readonly Banknote = Banknote;
+  readonly Car = Car;
+  readonly Clock = Clock;
+  readonly Motorbike = Motorbike;
+
+  readonly date = new FormControl(DateTime.now());
+  private dialog = inject(MatDialog);
+
+  addVehicle() {
+    const dialogRef = this.dialog.open(AddMonthlyDialog);
+  }
+
+  chartInstance!: ECharts;
+  option = {
+    backgroundColor: '#FFF',
+    tooltip: {
+      trigger: 'item'
+    },
+    legend: {
+      orient: 'horizontal',
+      left: 'left'
+    },
+    series: [
+      {
+        name: 'Vehicle Type',
+        type: 'pie',
+        radius: '50%',
+        data: [
+          { value: 24, name: 'CAR' },
+          { value: 47, name: 'MOTOR' },
+        ],
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        }
+      }
+    ]
+  };
+
+
+
+  onChartInit(e: ECharts) {
+    this.chartInstance = e;
+    console.log('on chart init:', e);
+  }
+
+  readonly COLUMNS: string[] = ['plateNumber', 'vehicleType', 'availedAt', 'expiresAt', 'duration', 'fee', 'status'] as const;
+  dataSource = new MatTableDataSource<any>(['TEST-PARK-MONTH']);
+
+  ngOnInit(): void {
+    console.log(this.date.value);
+  }
+}
