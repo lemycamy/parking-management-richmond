@@ -1,10 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { GET_PARKING_SESSIONS_BY_PARKING_STATE, GET_PARKING_STATISTICS, ParkingStatisticsResponse } from '../graphql/parking-sessions.queries';
 import { map, Observable } from 'rxjs';
-import { ParkingSession, ParkingSessionsByParkingStateResponse, ParkingSessionsVariables } from '../models/parking-session.model';
 import { PaginatedResponse } from '../../../shared/types/paginated-response.type';
-import { CREATE_PARKING_SESSION, EXIT_PARKING_SESSION } from '../graphql/parking.mutations';
+import { CreateParkingSessionDocument, ExitParkingSessionDocument, GetParkingSessionsDocument, GetParkingSessionsQuery, GetParkingSessionsQueryVariables, GetParkingStatisticsDocument, GetParkingStatisticsQuery, GetParkingStatisticsQueryVariables, ParkingSession } from '../../../../graphql/generated/graphql';
 
 @Injectable({
   providedIn: 'root',
@@ -14,20 +12,17 @@ export class ParkingService {
   private apollo = inject(Apollo);
 
   getParkingSessions(
-    parkingState: "ACTIVE" | "EXITED",
-    page: number = 1, 
-    limit: number = 10,
+    variables: GetParkingSessionsQueryVariables
   ): Observable<PaginatedResponse<ParkingSession>> {
     return this.apollo
-      .watchQuery<ParkingSessionsByParkingStateResponse, ParkingSessionsVariables>({
-      query: GET_PARKING_SESSIONS_BY_PARKING_STATE,
-      variables: { page, limit, parkingState: parkingState },
+      .watchQuery<GetParkingSessionsQuery, GetParkingSessionsQueryVariables>({
+      query: GetParkingSessionsDocument,
+      variables,
       fetchPolicy: 'network-only',  
     })
     .valueChanges
     .pipe(
       map(result => {
-        result.data?.parkingSessionsByParkingState;
         const raw = result.data?.parkingSessionsByParkingState;
 
         if (!raw) {
@@ -45,48 +40,49 @@ export class ParkingService {
     );
   }
 
-  createParkingSession(input: any, refetchActive: boolean = true) {
+  createParkingSession(input: any, date: string) {
     return this.apollo.mutate({
-      mutation: CREATE_PARKING_SESSION,
+      mutation: CreateParkingSessionDocument,
       variables: { input },
       refetchQueries: [
-        ...(refetchActive ? [{
-          query: GET_PARKING_SESSIONS_BY_PARKING_STATE,
-          variables: { parkingState: "ACTIVE", page: 1, limit: 10 }
-        }] : []),
         {
-          query: GET_PARKING_STATISTICS,
+          query: GetParkingSessionsDocument,
+          variables: { parkingState: "ACTIVE", date: date, page: 1, limit: 10 }
+        },
+        {
+          query: GetParkingStatisticsDocument,
+          variables: { parkingState: "ACTIVE", date: date }
         }
       ],
     })
   }
 
-  exitParkingSession(id: string) {
+  exitParkingSession(id: string, date: string) {
     return this.apollo.mutate({
-      mutation: EXIT_PARKING_SESSION,
+      mutation: ExitParkingSessionDocument,
       variables: { id },
-
       refetchQueries: [
         {
-          query: GET_PARKING_SESSIONS_BY_PARKING_STATE,
-          variables: { parkingState: "ACTIVE", page: 1, limit: 10 }
+          query: GetParkingSessionsDocument,
+          variables: { parkingState: "ACTIVE", date: date, page: 1, limit: 10 }
         },
         {
-          query: GET_PARKING_SESSIONS_BY_PARKING_STATE,
-          variables: { parkingState: "EXITED", page: 1, limit: 10 }
+          query: GetParkingSessionsDocument,
+          variables: { parkingState: "EXITED", date: date, page: 1, limit: 10 }
         },
         {
-          query: GET_PARKING_STATISTICS,
+          query: GetParkingStatisticsDocument,
+          variables: { parkingState: "ACTIVE", date: date }
         }
       ],
-
       awaitRefetchQueries: true,
     });
   }
 
-  getParkingStatistics() {
-    return this.apollo.watchQuery<ParkingStatisticsResponse>({
-      query: GET_PARKING_STATISTICS,
+  getParkingStatistics(variables: GetParkingStatisticsQueryVariables) {
+    return this.apollo.watchQuery<GetParkingStatisticsQuery, GetParkingStatisticsQueryVariables>({
+      query: GetParkingStatisticsDocument,
+      variables,
     })
   }
 }

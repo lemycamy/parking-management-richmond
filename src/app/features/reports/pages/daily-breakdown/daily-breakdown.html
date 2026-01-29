@@ -12,23 +12,23 @@
   <div class="mt-6 grid md:grid-cols-4 gap-6">
     <app-stat-card
       [icon]="Banknote"
-      label="Total Revenue Today"
-      [value]="0"
+      label="Total Revenue"
+      [value]="'₱' + (stats?.revenueToday ?? 0)"
     ></app-stat-card>
 
     <app-stat-card
       [icon]="Car"
       label="Total Entries"
-      [value]="0"
+      [value]="(stats?.totalEntriesToday ?? 0)"
       iconBgClass="bg-blue-200 text-blue-700"
     ></app-stat-card>
 
-    <app-stat-card
+    <!-- <app-stat-card
       [icon]="Clock"
       label="Avg Duration"
       value="0.0 hrs"
       iconBgClass="bg-amber-200 text-amber-700"
-    ></app-stat-card>
+    ></app-stat-card> -->
   </div>
 
   <h2 class="text-2xl font-semibold mt-6">Transaction Logs</h2>
@@ -47,20 +47,20 @@
       <ng-container cdkColumnDef="enteredAt">
         <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">ENTERED AT</th>
         <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 text-sm">
-          {{ element.enteredAt | date:'hh:mm:ss a' }}
+          {{ element.enteredAt | date:'hh:mm a' }}
         </td>
       </ng-container>
 
       <ng-container cdkColumnDef="exitedAt">
         <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">EXITED AT</th>
         <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 text-sm">
-          {{ element.exitedAt | date:'hh:mm:ss a' }}
+          {{ element.exitedAt | date:'hh:mm a' }}
         </td>
       </ng-container>
 
       <ng-container cdkColumnDef="duration">
         <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">DURATION</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 text-sm"> {{ element.durationMinutes }} mins</td>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 text-sm">{{ formatMinutes(element.durationMinutes) }}</td>
       </ng-container>
 
       <ng-container cdkColumnDef="fee">
@@ -77,6 +77,13 @@
           >
             {{ element.paymentStatus }}
           </span>
+        </td>
+      </ng-container>
+
+      <ng-container cdkColumnDef="actions">
+        <th cdk-header-cell *cdkHeaderCellDef class="text-right px-6 py-4 text-xs text-white whitespace-nowrap">ACTIONS</th>
+        <td cdk-cell *cdkCellDef="let element" class="text-right px-6 py-4 text-text-600 text-sm">
+          <app-button>PTB</app-button>
         </td>
       </ng-container>
 

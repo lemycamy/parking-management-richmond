@@ -10,9 +10,11 @@
 
     <div class="flex items-center gap-6">
       <ul class="flex font-medium text-text-600 gap-4">
-        <li class="cursor-pointer" routerLink="dashboard">Dashboard</li>
-        <li class="cursor-pointer" routerLink="parking">Parking</li>
-        <li class="cursor-pointer" routerLink="reports">Reports</li>
+        @for (item of menuItems; track $index) {
+          @if (hasAccess(item.roles)) {
+            <li class="cursor-pointer" routerLink="{{item.path}}">{{item.label}}</li>
+          }
+        }
       </ul>
 
       @if (authService.isLoggedIn()) {

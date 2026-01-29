@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { MatDialogContent, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { MatCheckboxModule, MatCheckboxChange } from '@angular/material/checkbox';
 import { Button } from '../../../../shared/ui/button/button';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { formatMinutes } from '../../../../shared/utils/time-format';
 
 @Component({
   selector: 'app-exit-confirmation-dialog',
@@ -17,8 +18,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 })
 export class ExitConfirmationDialog {
   private dialogRef = inject(MatDialogRef<ExitConfirmationDialog>);
-
-  
+  data = inject(MAT_DIALOG_DATA);
 
   cancel(): void {
     this.dialogRef.close(false);

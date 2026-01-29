@@ -32,11 +32,9 @@ import { AddMonthlyDialog } from '../../components/add-monthly-dialog/add-monthl
     StatCard,
     LucideAngularModule,
     CdkTableModule,
-    DatePipe,
     NgClass,
     NgxEchartsDirective,
     Button,
-    MatDialogContent,
     MatCheckboxModule
 ],
   templateUrl: './monthly-parking.html',
@@ -85,8 +83,6 @@ export class MonthlyParking {
       }
     ]
   };
-
-
 
   onChartInit(e: ECharts) {
     this.chartInstance = e;

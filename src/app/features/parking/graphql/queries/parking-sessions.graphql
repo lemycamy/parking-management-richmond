@@ -1,0 +1,30 @@
+query GetParkingSessions(
+  $page: Int!
+  $limit: Int!
+  $parkingState: String!
+  $date: String!
+) {
+  parkingSessionsByParkingState(
+    page: $page
+    limit: $limit
+    parkingState: $parkingState
+    date: $date
+  ) {
+    data {
+      id
+      vehicleType
+      plateNumber
+      enteredAt
+      exitedAt
+      durationMinutes
+      parkingFee
+      parkingState
+      paymentStatus
+    }
+    meta {
+      total
+      page
+      totalPages
+    } 
+  }
+}

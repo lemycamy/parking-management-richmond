@@ -17,28 +17,28 @@ export const routes: Routes = [
     },
     {
         path: 'dashboard',
-        // canActivate: [RoleGuard],
-        // data: { roles: ['admin'] },
+        canActivate: [RoleGuard],
+        data: { roles: ['admin'] },
         component: DashboardComponent
     },
     {
         path: 'parking',    
-        // canActivate: [RoleGuard],
-        // data: { roles: ['admin', 'user'] },
+        canActivate: [RoleGuard],
+        data: { roles: ['admin', 'user', 'thetaxman'] },
         loadChildren: () =>
             import('./features/parking/parking.routes').then(m => m.parkingRoutes)
     },
     {
         path: 'reports',   
-        // canActivate: [RoleGuard],
-        // data: { roles: ['admin'] },
+        canActivate: [RoleGuard],
+        data: { roles: ['admin'] },
         loadChildren: () =>
             import('./features/reports/reports.routes').then(m => m.reportsRoutes)
     },
     {
         path: 'b/reports',   
-        // canActivate: [RoleGuard],
-        // data: { roles: ['thetaxman'] },
+        canActivate: [RoleGuard],
+        data: { roles: ['admin', 'thetaxman'] },
         loadChildren: () =>
             import('./features/bir/bir.routes').then(m => m.birRoutes)
     },

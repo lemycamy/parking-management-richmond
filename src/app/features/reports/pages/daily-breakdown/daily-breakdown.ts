@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Subject, takeUntil } from 'rxjs';
 
-import { provideLuxonDateAdapter } from '@angular/material-luxon-adapter';
 import { DateTime } from 'luxon';
 import { Banknote, Car, Clock, LucideAngularModule, Motorbike } from 'lucide-angular';
 
@@ -11,12 +12,17 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { CdkTableModule } from '@angular/cdk/table';
 
 import { StatCard } from "../../../../shared/components/stat-card/stat-card";
-import { DEFAULT_DATE_FORMAT } from '../../../../shared/utils/date-format';
 import { MatTableDataSource } from '@angular/material/table';
 import { DatePipe, NgClass } from '@angular/common';
 import { NgxEchartsDirective } from 'ngx-echarts';
-import type { ECharts, EChartsCoreOption } from 'echarts/core';
+import type { ECharts } from 'echarts/core';
+import { ParkingService } from '../../../parking/services/parking.service';
+import { getTodayISO } from '../../../../shared/utils/date.utils';
+import { ParkingStatistics } from '../../../../../graphql/generated/graphql';
+import { formatMinutes } from '../../../../shared/utils/time-format';
+import { Button } from "../../../../shared/ui/button/button";
 
+type SessionState = 'ACTIVE' | 'EXITED';
 
 @Component({
   selector: 'app-daily-breakdown',
@@ -31,8 +37,9 @@ import type { ECharts, EChartsCoreOption } from 'echarts/core';
     CdkTableModule,
     DatePipe,
     NgClass,
-    NgxEchartsDirective
-  ],
+    NgxEchartsDirective,
+    Button
+],
   templateUrl: './daily-breakdown.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -43,7 +50,30 @@ export class DailyBreakdown {
   readonly Clock = Clock;
   readonly Motorbike = Motorbike;
 
-  readonly date = new FormControl(DateTime.now());
+  private parkingService = inject(ParkingService);
+  private destroy$ = new Subject<void>();
+  private destroyRef = inject(DestroyRef);
+
+  formatMinutes = formatMinutes;
+
+  readonly date = new FormControl(DateTime.now(), { nonNullable: true });
+  dateToday = this.date.value.toFormat('yyyy-MM-dd');
+
+  readonly COLUMNS: string[] = ['plateNumber', 'vehicleType', 'enteredAt', 'exitedAt', 'duration', 'fee', 'status', 'actions'] as const;
+  dataSource = new MatTableDataSource<any>([]);
+
+  stats: ParkingStatistics | null = null;
+
+  ngOnInit(): void {
+    this.loadSessions()
+    this.fetchParkingStatistics()
+
+    this.date.valueChanges.subscribe(() => {
+      this.dateToday = this.date.value.toFormat('yyyy-MM-dd');
+      this.loadSessions()
+      this.fetchParkingStatistics()
+    })
+  }
 
   chartInstance!: ECharts;
   option = {
@@ -75,17 +105,57 @@ export class DailyBreakdown {
     ]
   };
 
-
-
   onChartInit(e: ECharts) {
     this.chartInstance = e;
-    console.log('on chart init:', e);
   }
 
-  readonly COLUMNS: string[] = ['plateNumber', 'vehicleType', 'enteredAt', 'exitedAt', 'duration', 'fee', 'status'] as const;
-  dataSource = new MatTableDataSource<any>([]);
+  loadSessions(): void {
+    this.parkingService.getParkingSessions({
+      page: 1,
+      limit: 10,
+      parkingState: "EXITED",
+      date: this.dateToday,
+    }).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (response) => {
+        this.dataSource.data = response.data;
+        console.log(this.dataSource.data)
+      },
+      error: err => {
+        console.error('Error loading parking sessions:', err);
+      },
+    });
+  }
 
-  ngOnInit(): void {
-    console.log(this.date.value);
+  fetchParkingStatistics(): void {
+    this.parkingService.getParkingStatistics({
+      parkingState: "EXITED",
+      date: this.dateToday
+    }).valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: ({ data }) => {
+        const stats = data?.parkingStatistics;
+
+        if (!stats) {
+          this.stats = null;
+          return;
+        }
+
+        this.stats = {
+          parkedVehicles: stats.parkedVehicles ?? 0,
+          parkedMotorcycles: stats.parkedMotorcycles ?? 0,
+          revenueToday: stats.revenueToday ?? 0,
+          currentlyParked: stats.currentlyParked ?? 0,
+          totalEntriesToday: stats.totalEntriesToday ?? 0,
+        };
+
+        console.log(this.stats);
+      },
+      error: (err) => {
+        console.error('Error fetching parking statistics:', err);
+      }
+    })
   }
 }

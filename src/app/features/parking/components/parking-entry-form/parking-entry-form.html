@@ -17,7 +17,7 @@
           <mat-select formControlName="vehicleType">
             <mat-option value="CAR">CAR</mat-option>
             <mat-option value="MOTORCYCLE">MOTORCYCLE</mat-option>
-            <mat-option value="MOTORCYCLE">TRUCK</mat-option>
+            <mat-option value="TRUCK">TRUCK</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -33,12 +33,19 @@
           <mat-checkbox [checked]="isDelivery" (change)="onCheckboxChangeDelivery($event)" [disabled]="deliveryCheck">Delivery Vehicle</mat-checkbox>
         </div>
 
-        <div class="flex flex-col ml-2">
-          @if(hasDiscount){
-            <span>PWD/SC ID:</span>
-            <input [formControl]="idPWDSC" placeholder="Enter PWD/SC ID Number" class="border rounded-md p-2 text-sm md:w-1/2 lg:w-1/4"/>
-          }
-        </div>
+        @if(hasDiscount){
+          <div class="flex flex-col space-y-1">
+            <mat-form-field class="w-1/2" appearance="outline">
+              <mat-label>Name</mat-label>
+              <input matInput placeholder="Name">
+            </mat-form-field>
+
+            <mat-form-field class="w-1/2" appearance="outline">
+              <mat-label>PWD/SC ID</mat-label>
+              <input matInput placeholder="Enter PWD/SC ID Number">
+            </mat-form-field>
+          </div>
+        }
       </div>
 
       <button

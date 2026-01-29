@@ -1,14 +1,14 @@
+import { PaymentStatus, VehicleType } from "../../../../graphql/generated/graphql";
 import { PaginatedResponse } from "../../../shared/types/paginated-response.type";
-import { PaymentStatusEnum, VehicleTypeEnum } from "./parking.enums";
 
 export interface ParkingSession {
   id: string;
-  vehicleType: VehicleTypeEnum;
+  vehicleType: VehicleType;
   plateNumber: string;
   enteredAt: string;
-  exitedAt: string | null;
-  durationMinutes: number | null;
-  paymentStatus: PaymentStatusEnum;
+  exitedAt?: string | null;
+  durationMinutes?: number | null;
+  paymentStatus: PaymentStatus
 }
 
 export interface ParkingSessionsByParkingStateResponse {

@@ -1,0 +1,8 @@
+mutation ExitParkingSession($id: String!) {
+  exitParkingSession(id: $id) {
+    id
+    parkingState
+    exitedAt
+    paymentStatus
+  }
+}

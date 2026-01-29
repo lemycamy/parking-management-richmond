@@ -1,20 +1,32 @@
 <mat-dialog-content class="default-modal w-11/12 md:w-auto">
-  <div class="flex flex-col gap-2">
-    <h2 mat-dialog-title>Confirm Exit</h2>
-  
-    <div class="flex flex-col mb-3">
-      <div class="flex gap-2"><span>PLATE NUMBER:</span> <span class="font-semibold">WAP 1738</span> </div>
-      <div class="flex gap-2"><span>VEHICLE TYPE:</span> <span class="">CAR</span> </div>
-      <div class="flex gap-2"><span>DURATION:</span> <span class="">120 Mins</span> </div>
-    </div>
-    
-    <div>
-      <div class="flex gap-2"><span>PARKING FEE:</span> <span class="font-semibold">P 000.00</span> </div>
+  <h2 mat-dialog-title class="text-lg font-semibold text-text-900 leading-relaxed">Confirm Vehicle Exit</h2>
+  <p class="text-gray-500 leading-relaxed">Please review the parking details below before completing the exit.</p>
+
+  <div class="flex flex-col gap-1 border rounded-md p-2 bg-gray-50 my-4">
+    <div class="flex justify-between">
+      <span class="text-gray-500">Plate Number</span>
+      <span class="font-semibold">{{ data.plateNumber }}</span>
     </div>
 
-    <div class="flex gap-4 justify-end" mat-dialog-actions>
-      <app-button variant="neutral" (click)="cancel()">Cancel</app-button>
-      <app-button variant="danger" (click)="confirmExit()">Confirm Exit</app-button>
+    <div class="flex justify-between">
+      <span class="text-gray-500">Vehicle Type</span>
+      <span class="font-medium">{{ data.vehicleType }}</span>
     </div>
+  </div>
+
+  <!-- Warning -->
+  <p class="text-sm text-gray-500 leading-relaxed">
+    This action will close the parking session and cannot be undone.
+  </p>
+
+  <!-- Actions -->
+  <div class="flex gap-3 justify-end mt-4" mat-dialog-actions>
+    <app-button variant="neutral" (click)="cancel()">
+      Cancel
+    </app-button>
+
+    <app-button variant="danger" (click)="confirmExit()">
+      Confirm & Exit
+    </app-button>
   </div>
 </mat-dialog-content>

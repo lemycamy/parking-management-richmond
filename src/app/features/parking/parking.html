@@ -14,11 +14,11 @@
   <img src="/images/banners/active-banner.png" alt="Active Banner" class="hidden md:block w-full rounded-lg mt-6" />
   <img src="/images/banners/active-banner-mobile.png" alt="Active Banner" class="md:hidden w-full rounded-lg mt-6" />
 
-  <div class="mt-6 md:w-1/2 grid md:grid-cols-2 gap-4">
+  <div class="mt-6 grid md:grid-cols-4 gap-4">
     <div class="flex items-center justify-between text-end gap-4 bg-white rounded-lg shadow-sm border border-slate-200 p-5">
       <img src="/images/icons/car.png" alt="Car Icon" class="h-13">
       <div>
-        <p class="text-text-300">PARKED VEHICLES</p>
+        <p class="text-text-300">PARKED CARS</p>
         <p class="text-text-900 font-bold mt-1 text-xl">
           {{ stats?.parkedVehicles ?? 0 }}
         </p>
@@ -31,6 +31,16 @@
         <p class="text-text-300">PARKED MOTORCYCLES</p>
         <p class="text-text-900 font-bold mt-1 text-xl">
           {{ stats?.parkedMotorcycles ?? 0 }}
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between text-end gap-4 bg-white rounded-lg shadow-sm border border-slate-200 p-5">
+      <img src="/images/icons/truck.png" alt="Car Icon" class="h-13">
+      <div>
+        <p class="text-text-300">PARKED TRUCK</p>
+        <p class="text-text-900 font-bold mt-1 text-xl">
+          {{ stats?.parkedVehicles ?? 0 }}
         </p>
       </div>
     </div>
@@ -81,9 +91,14 @@
       </ng-container>
 
       <ng-container cdkColumnDef="actions">
-        <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">ACTIONS</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-3 text-text-600"> 
+        <th cdk-header-cell *cdkHeaderCellDef class="px-8 py-4 text-xs text-white whitespace-nowrap text-right">ACTIONS</th>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-3 flex items-center justify-end gap-4 text-text-600"> 
           <app-button variant="danger" (click)="exitSession(element)">Exit</app-button>
+          <lucide-angular [img]="ellipsisVertical" class="w-6 h-6" [matMenuTriggerFor]="menu"></lucide-angular>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>Void</button>
+            <button mat-menu-item>Unsetled</button>
+          </mat-menu>
         </td>
       </ng-container>
 
@@ -98,7 +113,6 @@
     </mat-paginator>
   </div>
 
-  <app-button variant="danger" (click)="exitSession('')">Exit</app-button>
   <img src="/images/banners/exited-banner.png" alt="Exited Banner" class="hidden md:block w-full rounded-lg mt-6" />
   <img src="/images/banners/exited-banner-mobile.png" alt="Exited Banner" class="md:hidden w-full rounded-lg mt-6" />
 
@@ -144,7 +158,7 @@
 
       <ng-container cdkColumnDef="duration">
         <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">DURATION</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 text-sm"> {{ element.durationMinutes }} mins</td>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 text-sm">{{ formatMinutes(element.durationMinutes) }}</td>
       </ng-container>
 
       <ng-container cdkColumnDef="fee">

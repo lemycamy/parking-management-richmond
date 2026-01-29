@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { ParkingService } from '../../services/parking.service';
 import { MatCheckbox, MatCheckboxChange } from "@angular/material/checkbox";
+import { getTodayISO } from '../../../../shared/utils/date.utils';
 
 @Component({
   selector: 'app-parking-entry-form',
@@ -81,7 +82,7 @@ export class ParkingEntryForm {
     if (this.entryForm.invalid) return;
     this.isSubmitting = true;
 
-    this.parkingService.createParkingSession(this.entryForm.value).pipe(
+    this.parkingService.createParkingSession(this.entryForm.value, getTodayISO()).pipe(
       finalize(() => {
         this.isSubmitting = false;
       })

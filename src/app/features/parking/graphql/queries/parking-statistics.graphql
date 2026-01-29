@@ -1,0 +1,15 @@
+query GetParkingStatistics(
+  $parkingState: String!
+  $date: String!
+) {
+  parkingStatistics(
+    parkingState: $parkingState
+    date: $date
+  ) {
+    parkedVehicles
+    parkedMotorcycles
+    revenueToday
+    currentlyParked
+    totalEntriesToday
+  }
+}

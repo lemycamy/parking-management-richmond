@@ -1,0 +1,10 @@
+mutation CreateParkingSession($input: CreateParkingSessionInput!) {
+  createParkingSession(input: $input) {
+    id
+    vehicleType
+    plateNumber
+    enteredAt
+    paymentStatus
+    parkingState
+  }
+}
