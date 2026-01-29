@@ -7,14 +7,9 @@
       <div class="flex gap-2"><span>VEHICLE TYPE:</span> <span class="">CAR</span> </div>
       <div class="flex gap-2"><span>DURATION:</span> <span class="">120 Mins</span> </div>
     </div>
-    <div class="flex flex-col mb-3">
-      <mat-checkbox [checked]="checkStatus" (change)="onCheckboxChange($event)">PWD/SC Viable</mat-checkbox>
-      @if(checkStatus){
-        <input [formControl]="idPWDSC" placeholder="Enter PWD/SC ID Number" class="border rounded-md p-2 text-sm"/>
-      }
-    </div>
+    
     <div>
-      <div class="flex gap-2"><span>PARKING FEE:</span> <span class="font-semibold">P {{ parkingFee }}</span> </div>
+      <div class="flex gap-2"><span>PARKING FEE:</span> <span class="font-semibold">P 000.00</span> </div>
     </div>
 
     <div class="flex gap-4 justify-end" mat-dialog-actions>

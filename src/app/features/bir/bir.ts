@@ -9,12 +9,12 @@ import { ReportItemCard } from "../../shared/components/report-item-card/report-
   imports: [
     MatButtonModule,
     LucideAngularModule,
-    ReportItemCard,
+    ReportItemCard
 ],
-  templateUrl: './reports.html',
-  styleUrl: './reports.css',
+  templateUrl: './bir.html',
+  styleUrl: './bir.css',
 })
-export class Reports {
+export class Bir {
   readonly ArrowLeftRight = ArrowLeftRight;
   readonly FileText = FileText;
   readonly Calendar = Calendar;

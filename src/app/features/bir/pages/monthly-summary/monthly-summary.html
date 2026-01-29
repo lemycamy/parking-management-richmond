@@ -1,13 +1,13 @@
 <section class="main-container pb-16">
-  <h1 class="text-3xl font-medium text-text-900 mt-6">Annual Breakdown</h1>
+  <h1 class="text-3xl font-medium text-text-900 mt-6">Monthly Breakdown</h1>
 
   <mat-form-field appearance="outline" class="mt-6">
     <mat-label>Verbose datepicker</mat-label>
     <input matInput [matDatepicker]="dp" [formControl]="date">
-    <mat-hint>YYYY</mat-hint>
+    <mat-hint>MMMM DD, YYYY</mat-hint>
     <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
     <mat-datepicker #dp
-      startView="multi-year"
+      startView="year"
       (monthSelected)="setMonthAndYear($event, dp)"
       panelClass="month-picker"></mat-datepicker>
   </mat-form-field>
@@ -15,14 +15,14 @@
   <div class="mt-6 grid md:grid-cols-4 gap-6">
     <app-stat-card
       [icon]="Banknote"
-      label="Total Revenue This Year"
-      [value]="350525"
+      label="Total Revenue This Month"
+      [value]="35000"
     ></app-stat-card>
 
     <app-stat-card
       [icon]="Car"
       label="Total Entries"
-      [value]="2700"
+      [value]="23"
       iconBgClass="bg-blue-200 text-blue-700"
     ></app-stat-card>
 
@@ -37,29 +37,29 @@
   <h2 class="text-2xl font-semibold mt-6">Transaction Logs</h2>
   <div class="w-full overflow-x-auto bg-white rounded-lg shadow-sm border border-slate-200 mt-2">
     <table cdk-table [dataSource]="dataSource" class="w-full border-collapse">
-      <ng-container cdkColumnDef="loggedMonth">
-        <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">MONTH</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 font-bold text-sm">MMMM YYYY</td>
+      <ng-container cdkColumnDef="loggedDate">
+        <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">Date</th>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 font-bold text-sm">01-01-2026</td>
       </ng-container>
 
       <ng-container cdkColumnDef="carAmount">
         <th cdk-header-cell *cdkHeaderCellDef class="text-center px-6 py-4 text-xs text-white whitespace-nowrap">NO. CARS</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 text-sm">-</td>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 text-sm">15</td>
       </ng-container>
 
       <ng-container cdkColumnDef="motorAmount">
         <th cdk-header-cell *cdkHeaderCellDef class="text-center px-6 py-4 text-xs text-white whitespace-nowrap">NO. MOTORCYCLES</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 text-sm">-</td>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 text-sm">8</td>
       </ng-container>
 
       <ng-container cdkColumnDef="duration">
         <th cdk-header-cell *cdkHeaderCellDef class="text-center px-6 py-4 text-xs text-white whitespace-nowrap">CAR/MOTOR TOTAL</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 text-sm"> P - / P -</td>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 text-sm"> P 1,250 / P 175</td>
       </ng-container>
 
       <ng-container cdkColumnDef="totalRevenue">
         <th cdk-header-cell *cdkHeaderCellDef class="text-center px-6 py-4 text-xs text-white whitespace-nowrap">TOTAL REVENUE</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 font-bold text-sm"> P - </td>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 font-bold text-sm"> P 1,425.00 </td>
       </ng-container>
 
       <ng-container cdkColumnDef="view">
@@ -83,8 +83,25 @@
       <div echarts (chartInit)="onVehicleChartInit($event)" [options]="vehicleOption" class="md:w-1/2 mt-4 rounded-xl shadow-sm"></div>
     </div>
     <div>
-      <h2 class="text-2xl font-semibold mt-6">Annual Revenue</h2>
-      <div echarts (chartInit)="onRevenueChartInit($event)" [options]="revenueOption" class="md:w-1/2 lg:w-full mt-4 rounded-xl shadow-sm"></div>
+      <h2 class="text-2xl font-semibold mt-6">Monthly Revenue (Per Week)</h2>
+      <div class="grid md:grid-cols-1 lg:grid-cols-2 mt-6 gap-4">
+        <div>
+          <h3 class="text-lg font-semibold mt-5">Week 1</h3>
+          <div echarts (chartInit)="onRevenueChartInit($event)" [options]="weekOneOption" class="lg:w-full md:w-1/2 mt-4 rounded-xl shadow-sm"></div>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mt-5">Week 2</h3>
+          <div echarts (chartInit)="onRevenueChartInit($event)" [options]="weekTwoOption" class="lg:w-full md:w-1/2 mt-4 rounded-xl shadow-sm"></div>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mt-5">Week 3</h3>
+          <div echarts (chartInit)="onRevenueChartInit($event)" [options]="weekThreeOption" class="lg:w-full md:w-1/2 mt-4 rounded-xl shadow-sm"></div>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mt-5">Week 4</h3>
+          <div echarts (chartInit)="onRevenueChartInit($event)" [options]="weekFourOption" class="lg:w-full md:w-1/2 mt-4 rounded-xl shadow-sm"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
