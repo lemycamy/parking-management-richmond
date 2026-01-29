@@ -35,4 +35,11 @@ export const routes: Routes = [
         loadChildren: () =>
             import('./features/reports/reports.routes').then(m => m.reportsRoutes)
     },
+    {
+        path: 'b/reports',   
+        // canActivate: [RoleGuard],
+        // data: { roles: ['thetaxman'] },
+        loadChildren: () =>
+            import('./features/bir/bir.routes').then(m => m.birRoutes)
+    },
 ];

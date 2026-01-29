@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 
@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 
 import { ParkingService } from '../../services/parking.service';
+import { MatCheckbox, MatCheckboxChange } from "@angular/material/checkbox";
 
 @Component({
   selector: 'app-parking-entry-form',
@@ -19,7 +20,8 @@ import { ParkingService } from '../../services/parking.service';
     ReactiveFormsModule,
     MatSelectModule,
     MatInputModule,
-  ],
+    MatCheckbox
+],
   templateUrl: './parking-entry-form.html',
   styleUrl: './parking-entry-form.css',
 })
@@ -33,6 +35,42 @@ export class ParkingEntryForm {
     vehicleType: ['', Validators.required],
     plateNumber: ['', Validators.required]
   })
+
+  hasDiscount = false;
+  isDelivery = false;
+
+  // Checkbox disable checker
+  scpwdCheck = false;
+  deliveryCheck = false;
+
+  idPWDSC = new FormControl('')
+
+  onCheckboxChangePWD(event: MatCheckboxChange){
+    this.hasDiscount = event.checked;
+    
+    console.log('Status', event.checked)
+    if (this.hasDiscount) {
+      this.deliveryCheck = true;
+      console.log("Is PWD/Senior")
+      console.log(this.hasDiscount)
+    } else {
+      console.log("Is NOT PWD/Senior")
+      this.deliveryCheck = false;
+      console.log(this.hasDiscount)
+    }
+  }
+  onCheckboxChangeDelivery(event: MatCheckboxChange){
+    this.isDelivery = event.checked;
+    console.log('Status', event.checked)
+    if (this.isDelivery) {
+      this.scpwdCheck = true;
+      console.log("Is Delivery")
+    } else {
+      console.log("Is NOT Delivery")
+      this.scpwdCheck = false;
+    }
+  }
+
 
   now$: Observable<Date> = interval(1000).pipe(
     startWith(0),

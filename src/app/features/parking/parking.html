@@ -41,7 +41,6 @@
       <mat-label>Filter</mat-label>
       <input matInput (keyup)="applyFilter($event, 'ACTIVE')" placeholder="Search by Plate or vehicle type..." #input>
     </mat-form-field>
-    <lucide-angular [img]="ScanQrCode" class="w-12 h-12 cursor-pointer" routerLink="parking/exit-scan"></lucide-angular>
   </div>
 
   <div class="w-full overflow-x-auto bg-white rounded-lg shadow-sm border border-slate-200">
@@ -103,10 +102,13 @@
   <img src="/images/banners/exited-banner.png" alt="Exited Banner" class="hidden md:block w-full rounded-lg mt-6" />
   <img src="/images/banners/exited-banner-mobile.png" alt="Exited Banner" class="md:hidden w-full rounded-lg mt-6" />
 
-  <mat-form-field appearance="outline" class="w-full h-full mt-6">
-    <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter($event, 'EXITED')" placeholder="Search by Plate or vehicle type..." #input>
-  </mat-form-field>
+  <div class="flex gap-3 items-center">
+    <mat-form-field appearance="outline" class="w-full h-full mt-6">
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event, 'EXITED')" placeholder="Search by Plate or vehicle type..." #input>
+    </mat-form-field>
+    <lucide-angular [img]="ScanQrCode" class="w-12 h-12 cursor-pointer" routerLink="parking/exit-scan"></lucide-angular>
+  </div>
   
   <div class="w-full overflow-x-auto bg-white rounded-lg shadow-sm border border-slate-200">
     <table cdk-table [dataSource]="sessionManagers.exited.dataSource" class="w-full border-collapse">
