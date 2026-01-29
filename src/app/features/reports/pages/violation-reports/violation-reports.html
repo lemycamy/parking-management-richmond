@@ -27,27 +27,27 @@
     <table cdk-table [dataSource]="dataSource" class="w-full border-collapse">
       <ng-container cdkColumnDef="loggedDate">
         <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">DATE</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 font-bold text-sm">01-25-2026</td>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 font-bold text-sm">MM-DD-YYYY</td>
       </ng-container>
 
       <ng-container cdkColumnDef="plateNumber">
         <th cdk-header-cell *cdkHeaderCellDef class="text-center px-6 py-4 text-xs text-white whitespace-nowrap">PLATE NUMBER</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 text-sm">WAP 1738</td>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 text-sm">XXX YYYY</td>
       </ng-container>
 
       <ng-container cdkColumnDef="vehicleTypeOf">
         <th cdk-header-cell *cdkHeaderCellDef class="text-center px-6 py-4 text-xs text-white whitespace-nowrap">VEHICLE TYPE</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 text-sm">Car</td>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 text-sm">-</td>
       </ng-container>
 
       <ng-container cdkColumnDef="violationTypeOf">
         <th cdk-header-cell *cdkHeaderCellDef class="text-center px-6 py-4 text-xs text-white whitespace-nowrap">VIOLATION</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-red-700 text-center text-text-600 text-sm">Ugly Vehicle</td>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-red-700 text-center text-text-600 text-sm">-</td>
       </ng-container>
 
       <ng-container cdkColumnDef="fineAmount">
         <th cdk-header-cell *cdkHeaderCellDef class="text-center px-6 py-4 text-xs text-white whitespace-nowrap">FINE</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 font-bold text-sm"> P 500.00 </td>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-center text-text-600 font-bold text-sm"> P - </td>
       </ng-container>
 
       <ng-container cdkColumnDef="view">
