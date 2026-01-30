@@ -111,6 +111,7 @@ export class Parking {
         manager.dataSource.data = response.data;
         console.log(manager.dataSource.data)
         manager.state.loading = false;  
+
       },
       error: err => {
         console.error('Error loading parking sessions:', err);
@@ -124,7 +125,7 @@ export class Parking {
     const dateToday = getTodayISO()
 
     this.parkingService.getParkingStatistics({
-      parkingState: "ACTIVE",
+      parkingState: "EXITED",
       date: dateToday
     }).valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef)
