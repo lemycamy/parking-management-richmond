@@ -35,9 +35,9 @@ export class ParkingEntryForm {
   entryForm: FormGroup = this.fb.group({
     vehicleType: ['', Validators.required],
     plateNumber: ['', Validators.required],
-    discountType: ['NONE'],
-    discountHolderName: [''],
-    discountIdNumber: [''],
+    // discountType: ['NONE'],
+    // discountHolderName: [''],
+    // discountIdNumber: [''],
   })
 
   hasDiscount = false;
