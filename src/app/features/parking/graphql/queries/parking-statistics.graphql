@@ -1,10 +1,12 @@
 query GetParkingStatistics(
   $parkingState: String!
   $date: String!
+  $includeInBIRReport: Boolean
 ) {
   parkingStatistics(
     parkingState: $parkingState
     date: $date
+    includeInBIRReport: $includeInBIRReport
   ) {
     parkedVehicles
     parkedMotorcycles

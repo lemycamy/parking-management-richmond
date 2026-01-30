@@ -1,0 +1,14 @@
+mutation IncludeParkingSessionInBIR($id: String!) {
+  includeParkingSessionInBIR(id: $id) {
+    id
+    vehicleType
+    plateNumber
+    enteredAt
+    exitedAt
+    durationMinutes
+    parkingFee
+    parkingState
+    paymentStatus
+    includeInBIRReport
+  }
+}

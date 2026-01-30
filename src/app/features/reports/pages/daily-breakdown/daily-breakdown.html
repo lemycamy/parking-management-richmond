@@ -76,7 +76,10 @@
       <ng-container cdkColumnDef="actions">
         <th cdk-header-cell *cdkHeaderCellDef class="text-right px-6 py-4 text-xs text-white whitespace-nowrap">ACTIONS</th>
         <td cdk-cell *cdkCellDef="let element" class="text-right px-6 py-4 text-text-600 text-sm">
-          <app-button>TTB</app-button>
+          <app-button
+            [disabled]="element.includeInBIRReport"
+            (click)="markSessionAsIncludedInBIR(element.id)"
+          >TTB</app-button>
         </td>
       </ng-container>
 

@@ -13,21 +13,14 @@
     <app-stat-card
       [icon]="Banknote"
       label="Total Revenue Today"
-      [value]="5500"
+      [value]="'₱' + (stats?.revenueToday ?? 0)"
     ></app-stat-card>
 
     <app-stat-card
       [icon]="Car"
       label="Total Entries"
-      [value]="234"
+      [value]="'₱' + (stats?.totalEntriesToday ?? 0)"
       iconBgClass="bg-blue-200 text-blue-700"
-    ></app-stat-card>
-
-    <app-stat-card
-      [icon]="Clock"
-      label="Avg Duration"
-      value="3.2 hrs"
-      iconBgClass="bg-amber-200 text-amber-700"
     ></app-stat-card>
   </div>
 
@@ -60,7 +53,7 @@
 
       <ng-container cdkColumnDef="duration">
         <th cdk-header-cell *cdkHeaderCellDef class="text-left px-6 py-4 text-xs text-white whitespace-nowrap">DURATION</th>
-        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 text-sm"> {{ element.durationMinutes }} mins</td>
+        <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 text-sm"> {{ formatMinutes(element.durationMinutes) }} mins</td>
       </ng-container>
 
       <ng-container cdkColumnDef="fee">

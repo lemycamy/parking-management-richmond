@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
@@ -17,10 +17,10 @@ import { DatePipe, NgClass } from '@angular/common';
 import { NgxEchartsDirective } from 'ngx-echarts';
 import type { ECharts } from 'echarts/core';
 import { ParkingService } from '../../../parking/services/parking.service';
-import { getTodayISO } from '../../../../shared/utils/date.utils';
 import { ParkingStatistics } from '../../../../../graphql/generated/graphql';
 import { formatMinutes } from '../../../../shared/utils/time-format';
 import { Button } from "../../../../shared/ui/button/button";
+import { ReportsService } from '../../services/reports.service';
 
 type SessionState = 'ACTIVE' | 'EXITED';
 
@@ -41,7 +41,6 @@ type SessionState = 'ACTIVE' | 'EXITED';
     Button
 ],
   templateUrl: './daily-breakdown.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class DailyBreakdown {
@@ -53,6 +52,8 @@ export class DailyBreakdown {
   private parkingService = inject(ParkingService);
   private destroy$ = new Subject<void>();
   private destroyRef = inject(DestroyRef);
+  private reportsService = inject(ReportsService);
+  private cdr = inject(ChangeDetectorRef);
 
   formatMinutes = formatMinutes;
 
@@ -63,6 +64,7 @@ export class DailyBreakdown {
   dataSource = new MatTableDataSource<any>([]);
 
   stats: ParkingStatistics | null = null;
+  
 
   ngOnInit(): void {
     this.loadSessions()
@@ -121,6 +123,7 @@ export class DailyBreakdown {
       next: (response) => {
         this.dataSource.data = response.data;
         console.log(this.dataSource.data)
+        this.cdr.detectChanges();
       },
       error: err => {
         console.error('Error loading parking sessions:', err);
@@ -131,15 +134,17 @@ export class DailyBreakdown {
   fetchParkingStatistics(): void {
     this.parkingService.getParkingStatistics({
       parkingState: "EXITED",
-      date: this.dateToday
+      date: this.dateToday,
     }).valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe({
       next: ({ data }) => {
+        console.log('Fetching stats for date:', this.dateToday);
         const stats = data?.parkingStatistics;
 
         if (!stats) {
           this.stats = null;
+          this.cdr.detectChanges(); 
           return;
         }
 
@@ -152,9 +157,21 @@ export class DailyBreakdown {
         };
 
         console.log(this.stats);
+        this.cdr.detectChanges(); 
       },
       error: (err) => {
         console.error('Error fetching parking statistics:', err);
+      }
+    })
+  }
+
+  markSessionAsIncludedInBIR(id: string) {
+    this.reportsService.markSessionAsIncludedInBIR(id, this.dateToday).subscribe({
+      next: (response) => {
+        console.log('Session marked as included in BIR:', response);
+      },
+      error: (err) => {
+        console.error('Error marking session as included in BIR:', err);
       }
     })
   }

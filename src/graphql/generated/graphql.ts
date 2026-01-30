@@ -28,6 +28,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createParkingSession: ParkingSession;
   exitParkingSession: ParkingSession;
+  includeParkingSessionInBIR: ParkingSession;
 };
 
 
@@ -37,6 +38,11 @@ export type MutationCreateParkingSessionArgs = {
 
 
 export type MutationExitParkingSessionArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationIncludeParkingSessionInBirArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -63,6 +69,7 @@ export type ParkingSession = {
   exitedAt?: Maybe<Scalars['DateTime']['output']>;
   guardRemarks?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
+  includeInBIRReport: Scalars['Boolean']['output'];
   parkingCredits?: Maybe<Scalars['Int']['output']>;
   parkingFee?: Maybe<Scalars['Float']['output']>;
   parkingState: ParkingState;
@@ -97,6 +104,7 @@ export type Query = {
   parkingSessions: PaginatedParkingSessions;
   parkingSessionsByParkingState: PaginatedParkingSessions;
   parkingStatistics: ParkingStatistics;
+  vehicleStats: Array<VehicleStats>;
 };
 
 
@@ -108,6 +116,7 @@ export type QueryParkingSessionsArgs = {
 
 export type QueryParkingSessionsByParkingStateArgs = {
   date: Scalars['String']['input'];
+  includeInBIRReport?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
   page: Scalars['Int']['input'];
   parkingState: Scalars['String']['input'];
@@ -116,12 +125,25 @@ export type QueryParkingSessionsByParkingStateArgs = {
 
 export type QueryParkingStatisticsArgs = {
   date: Scalars['String']['input'];
+  includeInBIRReport?: InputMaybe<Scalars['Boolean']['input']>;
   parkingState: Scalars['String']['input'];
 };
 
+
+export type QueryVehicleStatsArgs = {
+  date: Scalars['DateTime']['input'];
+};
+
+export type VehicleStats = {
+  __typename?: 'VehicleStats';
+  name: Scalars['String']['output'];
+  value: Scalars['Int']['output'];
+};
+
 export enum VehicleType {
+  Car = 'CAR',
   Motorcycle = 'MOTORCYCLE',
-  Vehicle = 'VEHICLE'
+  Truck = 'TRUCK'
 }
 
 export type CreateParkingSessionMutationVariables = Exact<{
@@ -143,18 +165,27 @@ export type GetParkingSessionsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
   parkingState: Scalars['String']['input'];
   date: Scalars['String']['input'];
+  includeInBIRReport?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 
-export type GetParkingSessionsQuery = { __typename?: 'Query', parkingSessionsByParkingState: { __typename?: 'PaginatedParkingSessions', data: Array<{ __typename?: 'ParkingSession', id: string, vehicleType: VehicleType, plateNumber: string, enteredAt: any, exitedAt?: any | null, durationMinutes?: number | null, parkingFee?: number | null, parkingState: ParkingState, paymentStatus: PaymentStatus }>, meta: { __typename?: 'PaginationMeta', total: number, page: number, totalPages: number } } };
+export type GetParkingSessionsQuery = { __typename?: 'Query', parkingSessionsByParkingState: { __typename?: 'PaginatedParkingSessions', data: Array<{ __typename?: 'ParkingSession', id: string, vehicleType: VehicleType, plateNumber: string, enteredAt: any, exitedAt?: any | null, durationMinutes?: number | null, parkingFee?: number | null, parkingState: ParkingState, paymentStatus: PaymentStatus, includeInBIRReport: boolean }>, meta: { __typename?: 'PaginationMeta', total: number, page: number, totalPages: number } } };
 
 export type GetParkingStatisticsQueryVariables = Exact<{
   parkingState: Scalars['String']['input'];
   date: Scalars['String']['input'];
+  includeInBIRReport?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 
 export type GetParkingStatisticsQuery = { __typename?: 'Query', parkingStatistics: { __typename?: 'ParkingStatistics', parkedVehicles: number, parkedMotorcycles: number, revenueToday: number, currentlyParked: number, totalEntriesToday: number } };
+
+export type IncludeParkingSessionInBirMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type IncludeParkingSessionInBirMutation = { __typename?: 'Mutation', includeParkingSessionInBIR: { __typename?: 'ParkingSession', id: string, vehicleType: VehicleType, plateNumber: string, enteredAt: any, exitedAt?: any | null, durationMinutes?: number | null, parkingFee?: number | null, parkingState: ParkingState, paymentStatus: PaymentStatus, includeInBIRReport: boolean } };
 
 export const CreateParkingSessionDocument = gql`
     mutation CreateParkingSession($input: CreateParkingSessionInput!) {
@@ -201,12 +232,13 @@ export const ExitParkingSessionDocument = gql`
     }
   }
 export const GetParkingSessionsDocument = gql`
-    query GetParkingSessions($page: Int!, $limit: Int!, $parkingState: String!, $date: String!) {
+    query GetParkingSessions($page: Int!, $limit: Int!, $parkingState: String!, $date: String!, $includeInBIRReport: Boolean) {
   parkingSessionsByParkingState(
     page: $page
     limit: $limit
     parkingState: $parkingState
     date: $date
+    includeInBIRReport: $includeInBIRReport
   ) {
     data {
       id
@@ -218,6 +250,7 @@ export const GetParkingSessionsDocument = gql`
       parkingFee
       parkingState
       paymentStatus
+      includeInBIRReport
     }
     meta {
       total
@@ -239,8 +272,12 @@ export const GetParkingSessionsDocument = gql`
     }
   }
 export const GetParkingStatisticsDocument = gql`
-    query GetParkingStatistics($parkingState: String!, $date: String!) {
-  parkingStatistics(parkingState: $parkingState, date: $date) {
+    query GetParkingStatistics($parkingState: String!, $date: String!, $includeInBIRReport: Boolean) {
+  parkingStatistics(
+    parkingState: $parkingState
+    date: $date
+    includeInBIRReport: $includeInBIRReport
+  ) {
     parkedVehicles
     parkedMotorcycles
     revenueToday
@@ -255,6 +292,33 @@ export const GetParkingStatisticsDocument = gql`
   })
   export class GetParkingStatisticsGQL extends Apollo.Query<GetParkingStatisticsQuery, GetParkingStatisticsQueryVariables> {
     override document = GetParkingStatisticsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const IncludeParkingSessionInBirDocument = gql`
+    mutation IncludeParkingSessionInBIR($id: String!) {
+  includeParkingSessionInBIR(id: $id) {
+    id
+    vehicleType
+    plateNumber
+    enteredAt
+    exitedAt
+    durationMinutes
+    parkingFee
+    parkingState
+    paymentStatus
+    includeInBIRReport
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class IncludeParkingSessionInBirGQL extends Apollo.Mutation<IncludeParkingSessionInBirMutation, IncludeParkingSessionInBirMutationVariables> {
+    override document = IncludeParkingSessionInBirDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

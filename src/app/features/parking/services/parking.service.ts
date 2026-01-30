@@ -83,6 +83,7 @@ export class ParkingService {
     return this.apollo.watchQuery<GetParkingStatisticsQuery, GetParkingStatisticsQueryVariables>({
       query: GetParkingStatisticsDocument,
       variables,
+      fetchPolicy: 'network-only'
     })
   }
 }

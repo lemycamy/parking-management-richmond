@@ -12,6 +12,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 
 export class Button {
   @Input() variant: 'primary' | 'danger' | 'neutral' = 'primary';
+  @Input() disabled: boolean = false;
 
   get buttonClasses(): string {
     const variants = {
