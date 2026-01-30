@@ -34,13 +34,15 @@ export class ParkingEntryForm {
   isSubmitting = false;
   entryForm: FormGroup = this.fb.group({
     vehicleType: ['', Validators.required],
-    plateNumber: ['', Validators.required]
+    plateNumber: ['', Validators.required],
+    discountType: ['NONE'],
+    discountHolderName: [''],
+    discountIdNumber: [''],
   })
 
   hasDiscount = false;
   isDelivery = false;
 
-  // Checkbox disable checker
   scpwdCheck = false;
   deliveryCheck = false;
 
@@ -60,6 +62,7 @@ export class ParkingEntryForm {
       console.log(this.hasDiscount)
     }
   }
+
   onCheckboxChangeDelivery(event: MatCheckboxChange){
     this.isDelivery = event.checked;
     console.log('Status', event.checked)
@@ -81,6 +84,7 @@ export class ParkingEntryForm {
   onSubmit() {
     if (this.entryForm.invalid) return;
     this.isSubmitting = true;
+    console.log(this.entryForm);
 
     this.parkingService.createParkingSession(this.entryForm.value, getTodayISO()).pipe(
       finalize(() => {

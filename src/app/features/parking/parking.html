@@ -58,10 +58,12 @@
       <ng-container cdkColumnDef="vehicleType">
         <th cdk-header-cell *cdkHeaderCellDef></th>
         <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 font-bold text-sm w-12">
-          @if (element.vehicleType == 'VEHICLE') {
+          @if (element.vehicleType == 'CAR') {
             <lucide-angular [img]="Car" class="w-8 h-8"></lucide-angular>
-          } @else {
+          } @else if (element.vehicleType == 'MOTORCYCLE') {
             <lucide-angular [img]="Motorbike" class="w-8 h-8"></lucide-angular>
+          } @else {
+            <lucide-angular [img]="Truck" class="w-8 h-8"></lucide-angular>
           }
         </td>
       </ng-container>
@@ -129,10 +131,12 @@
       <ng-container cdkColumnDef="vehicleType">
         <th cdk-header-cell *cdkHeaderCellDef></th>
         <td cdk-cell *cdkCellDef="let element" class="px-6 py-4 text-text-600 font-bold text-sm w-12">
-          @if (element.vehicleType == 'VEHICLE') {
+          @if (element.vehicleType == 'CAR') {
             <lucide-angular [img]="Car" class="w-8 h-8"></lucide-angular>
-          } @else {
+          } @else if (element.vehicleType == 'MOTORCYCLE') {
             <lucide-angular [img]="Motorbike" class="w-8 h-8"></lucide-angular>
+          } @else {
+            <lucide-angular [img]="Truck" class="w-8 h-8"></lucide-angular>
           }
         </td>
       </ng-container>

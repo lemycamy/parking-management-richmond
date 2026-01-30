@@ -16,7 +16,7 @@ import { ParkingService } from './services/parking.service';
 import { QueryState } from '../../core/models/graphql-response.model';
 import { ParkingSession } from './models/parking-session.model';
 
-import { Car, EllipsisVertical, LucideAngularModule, Motorbike, ScanQrCode } from 'lucide-angular';
+import { Car, EllipsisVertical, LucideAngularModule, Motorbike, ScanQrCode, Truck } from 'lucide-angular';
 import { PaginatedResponse } from '../../shared/types/paginated-response.type';
 import { ParkingEntryForm } from "./components/parking-entry-form/parking-entry-form";
 import { ExitConfirmationDialog } from './components/exit-confirmation-dialog/exit-confirmation-dialog';
@@ -50,6 +50,7 @@ type SessionState = 'ACTIVE' | 'EXITED';
 export class Parking {
   readonly Car = Car;
   readonly Motorbike = Motorbike;
+  readonly Truck = Truck;
   readonly ScanQrCode = ScanQrCode;
   readonly ellipsisVertical = EllipsisVertical;
 
